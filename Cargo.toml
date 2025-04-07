@@ -1,0 +1,10 @@
+[package]
+name = "rustVPN"
+version = "0.1.0"
+edition = "2024"
+
+
+[dependencies]
+boringtun = { git = "https://github.com/cloudflare/boringtun", branch = "main" }
+shadowsocks-rust = { git = "https://github.com/shadowsocks/shadowsocks-rust", tag = "v1.0.0" }
+openssl = "0.10"
