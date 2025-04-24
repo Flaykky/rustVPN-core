@@ -8,7 +8,7 @@ A minimalistic VPN client for private use.
 - Cross-platform support (Windows/Linux)
 - obfuscation
 - Shadowsocks protocol support
-- PFS support
+- PFS 
 - WireGuard protocol support
 - smart defence against DPI (comming soon)
 
