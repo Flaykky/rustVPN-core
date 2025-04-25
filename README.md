@@ -6,11 +6,11 @@ A minimalistic VPN client for private use.
 - Basic TCP&UDP tunneling
 - Connect with HTTPS proxies
 - Cross-platform support (Windows/Linux)
-- obfuscation
+- obfuscation (udp over tcp, comming soon: mine own obfuscation against dpi)
 - Shadowsocks protocol support
-- PFS 
+- PFS support
 - WireGuard protocol support
-- smart defence against DPI (comming soon)
+- smart defence against DPI
 
 
 ## Basic WireGuard tunneling
