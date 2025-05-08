@@ -2,6 +2,8 @@
 
 A minimalistic VPN client for private use.
 
+(core means only logic of connecting)
+
 ## Features
 - Basic TCP&UDP tunneling
 - Connect with HTTPS proxies
@@ -38,3 +40,7 @@ A minimalistic VPN client for private use.
 ```bash
 ./VpnCore help
 ```
+
+## license 
+
+MIT
