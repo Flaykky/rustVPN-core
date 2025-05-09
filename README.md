@@ -43,4 +43,4 @@ A minimalistic VPN client for private use.
 
 ## license 
 
-MIT
+Distributed under the MIT License. See [LICENSE](LICENSE) file for details.
