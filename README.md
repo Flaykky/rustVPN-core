@@ -14,6 +14,11 @@ A minimalistic VPN client for private use.
 - WireGuard protocol support
 - smart defence against DPI
 
+## installation
+```bash
+git clone https://github.com/Flaykky/rustVPN-core
+cd rustVPN-core
+```
 
 ## Basic WireGuard tunneling
 ```bash
