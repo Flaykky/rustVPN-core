@@ -1,10 +1,22 @@
 [package]
-name = "rustVPN"
+name = "VPN-core"
 version = "0.1.0"
 edition = "2024"
-
 
 [dependencies]
 boringtun = { git = "https://github.com/cloudflare/boringtun", branch = "main" }
 shadowsocks-rust = { git = "https://github.com/shadowsocks/shadowsocks-rust", tag = "v1.0.0" }
 openssl = "0.10"
+tokio = { version = "1.40.0", features = ["full"] }
+futures = "0.3.30"
+toml = "0.8.19"
+serde = { version = "1.0.210", features = ["derive"] }
+log = "0.4.22"
+env_logger = "0.11.5"
+thiserror = "1.0.64"
+anyhow = "1.0.89"
+reqwest = { version = "0.12.7", features = ["json"] }
+hyper = "1.4.1"
+ring = "0.17.8"
+crossbeam = "0.8.4"
+libc = "0.2.159"
