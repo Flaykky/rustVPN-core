@@ -6,17 +6,19 @@ edition = "2024"
 [dependencies]
 boringtun = { git = "https://github.com/cloudflare/boringtun", branch = "main" }
 shadowsocks-rust = { git = "https://github.com/shadowsocks/shadowsocks-rust", tag = "v1.0.0" }
-openssl = "0.10"
+openssl = "0.10.66"
 tokio = { version = "1.40.0", features = ["full"] }
-futures = "0.3.30"
-toml = "0.8.19"
 serde = { version = "1.0.210", features = ["derive"] }
+serde_json = "1.0.128"
+clap = { version = "4.5.20", features = ["derive"] }
 log = "0.4.22"
 env_logger = "0.11.5"
-thiserror = "1.0.64"
-anyhow = "1.0.89"
-reqwest = { version = "0.12.7", features = ["json"] }
-hyper = "1.4.1"
-ring = "0.17.8"
-crossbeam = "0.8.4"
-libc = "0.2.159"
+thiserror = "2.0.12"
+bytes = "1.7.2"
+async-trait = "0.1.83"
+base64 = "0.22.1"
+hex = "0.4.3"
+argon2 = "0.5.3"
+rand = "0.9.1"
+tun-tap = "0.1.4"
+tokio-socks = "0.5.1"
