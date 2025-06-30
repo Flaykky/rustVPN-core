@@ -71,6 +71,13 @@ src/
 └── main.rs                    # Entry point for CLI application
 ```
 
+## levels of cliInterface
+
+- first: Minimum, only important info
+- second: minimum with details
+- third: just comfort interface  
+- fourth: most similar to GUI
+
 ## installation
 ```bash
 git clone https://github.com/Flaykky/rustVPN-core
@@ -114,6 +121,7 @@ cd rustVPN-core
 - shadowsocks protocol support ✔️
 - install_linux , install_win64, install_mac bash scripts ❌
 - encryption methods ❌
+- 
 
 ## license 
 
