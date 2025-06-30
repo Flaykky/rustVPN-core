@@ -115,13 +115,13 @@ cd rustVPN-core
 ## TODO
 
 - CLI interface ❌
-- DPI obfuscation ❌
-- wireguard through shadowsocks ❌
+- DPI obfuscations ❌
+- wireguard through shadowsocks obfuscation ❌
 - http/https/socks4/socks5 proxy support ✔️
 - shadowsocks protocol support ✔️
-- install_linux , install_win64, install_mac bash scripts ❌
+- install_linux , install_win64, install_mac bash scripts for installations ❌
 - encryption methods ❌
-- 
+- openvpn protocol support ❌
 
 ## license 
 
