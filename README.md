@@ -105,7 +105,7 @@ cd rustVPN-core
 ```
 
 
-## TODO:
+## TODO
 
 - CLI interface ❌
 - DPI obfuscation ❌
