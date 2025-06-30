@@ -78,12 +78,34 @@ src/
 - third: just comfort interface  
 - fourth: most similar to GUI
 
-## installation
+## installation && building
+
+### cloning repository 
 ```bash
 git clone https://github.com/Flaykky/rustVPN-core
 cd rustVPN-core
+```
+
+
+### requirments
+- rustc 
+- libaries in cargo.toml
+
+### building
+
+for linux:
+
+```bash
 ./install_linux.sh
 ```
+
+for windows (64, x86): 
+
+```powershell
+./install_win64.sh
+```
+
+
 
 ## Basic WireGuard tunneling
 ```bash
