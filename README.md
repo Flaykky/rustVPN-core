@@ -14,7 +14,7 @@ A full VPN client in CLI mode,
 - WireGuard protocol support
 - smart defence against DPI
 
-## Struct of project:
+## Struct of project
 ```text
 src/
 ├── connection/
