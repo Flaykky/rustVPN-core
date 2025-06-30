@@ -23,27 +23,27 @@ impl Shadowsocks {
         tun_interface_name: &str,
         tun_interface_address: &str,
     ) -> Result<Self, VpnError> {
-        log_info!("Инициализация Shadowsocks с сервером {}:{}", server_ip, server_port);
+        log_info!("Initializing Shadowsocks with server {}:{}", server_ip, server_port);
 
-        // Проверка IP
+        // Check server IP
         server_ip.parse::<std::net::IpAddr>().map_err(|e| {
-            log_warn!("Некорректный IP-адрес сервера: {}", e);
-            VpnError::ConfigError(format!("Некорректный IP-адрес сервера: {}", e))
+            log_warn!("Invalid server IP address: {}", e);
+            VpnError::ConfigError(format!("Invalid server IP address: {}", e))
         })?;
 
-        // Проверка метода шифрования
+        // Check encryption method
         if !["aes-256-gcm", "chacha20-ietf-poly1305", "2022-blake3-aes-256-gcm"].contains(&method) {
-            log_warn!("Неподдерживаемый метод шифрования: {}", method);
-            return Err(VpnError::ConfigError(format!("Неподдерживаемый метод шифрования: {}", method)));
+            log_warn!("Unsupported encryption method: {}", method);
+            return Err(VpnError::ConfigError(format!("Unsupported encryption method: {}", method)));
         }
 
-        // Проверка TUN-параметров
+        // Check TUN parameters
         if tun_interface_name.is_empty() {
-            return Err(VpnError::ConfigError("Имя TUN-интерфейса не может быть пустым".to_string()));
+            return Err(VpnError::ConfigError("TUN interface name cannot be empty".to_string()));
         }
 
         if tun_interface_address.is_empty() {
-            return Err(VpnError::ConfigError("Адрес TUN-интерфейса не может быть пустым".to_string()));
+            return Err(VpnError::ConfigError("TUN interface address cannot be empty".to_string()));
         }
 
         Ok(Self {
@@ -62,29 +62,29 @@ impl Protocol for Shadowsocks {
     type Connection = ShadowsocksConnection;
 
     async fn connect(&self) -> Result<Self::Connection, VpnError> {
-        log_info!("Настройка соединения Shadowsocks с TUN-интерфейсом");
+        log_info!("Configuring Shadowsocks connection with TUN interface");
 
-        // Создание адреса сервера
+        // Create server address
         let server_addr = SocketAddr::new(
             self.server_ip.parse().map_err(|e| {
-                log_warn!("Некорректный IP-адрес сервера: {}", e);
-                VpnError::ConfigError(format!("Некорректный IP-адрес сервера: {}", e))
+                log_warn!("Invalid server IP address: {}", e);
+                VpnError::ConfigError(format!("Invalid server IP address: {}", e))
             })?,
             self.server_port,
         );
 
-        // Создание конфигурации сервера
+        // Create server configuration
         let server_config = ServerConfig {
             address: server_addr,
             method: self.method.parse().map_err(|e| {
-                log_warn!("Неверный метод шифрования: {}", e);
-                VpnError::ConfigError(format!("Неверный метод шифрования: {}", e))
+                log_warn!("Invalid encryption method: {}", e);
+                VpnError::ConfigError(format!("Invalid encryption method: {}", e))
             })?,
             password: Some(self.password.clone()),
             ..Default::default()
         };
 
-        // Создание локальной конфигурации для TUN
+        // Create local configuration for TUN
         let local_config = LocalConfig {
             protocol: shadowsocks::config::ProtocolType::Tun,
             tun_interface_name: Some(self.tun_interface_name.clone()),
@@ -105,7 +105,7 @@ impl Protocol for Shadowsocks {
             ipv6_first: false,
         };
 
-        // Общая конфигурация
+        // Global configuration
         let config = Config {
             local: vec![local_config],
             server: vec![server_config],
@@ -119,15 +119,15 @@ impl Protocol for Shadowsocks {
             mode: shadowsocks::config::Mode::TcpUdp,
         };
 
-        // Запуск Shadowsocks в отдельной задаче
+        // Start Shadowsocks in a separate task
         tokio::spawn(async move {
-            log_info!("Запуск Shadowsocks клиента в режиме TUN");
+            log_info!("Starting Shadowsocks client in TUN mode");
             if let Err(e) = run_local(config).await {
-                log_warn!("Ошибка в run_local: {}", e);
+                log_warn!("Error in run_local: {}", e);
             }
         });
 
-        log_info!("Настройка соединения Shadowsocks завершена");
+        log_info!("Shadowsocks connection setup completed");
         Ok(ShadowsocksConnection {})
     }
 }
@@ -137,17 +137,17 @@ pub struct ShadowsocksConnection {}
 #[async_trait::async_trait]
 impl Connection for ShadowsocksConnection {
     async fn send_packet(&mut self, _packet: &[u8]) -> Result<(), VpnError> {
-        log_debug!("TUN-режим: send_packet не поддерживается");
-        Err(VpnError::ConnectionError("TUN-режим: send_packet не поддерживается".to_string()))
+        log_debug!("TUN mode: send_packet is not supported");
+        Err(VpnError::ConnectionError("TUN mode: send_packet is not supported".to_string()))
     }
 
     async fn receive_packet(&mut self) -> Result<Vec<u8>, VpnError> {
-        log_debug!("TUN-режим: receive_packet не поддерживается");
-        Err(VpnError::ConnectionError("TUN-режим: receive_packet не поддерживается".to_string()))
+        log_debug!("TUN mode: receive_packet is not supported");
+        Err(VpnError::ConnectionError("TUN mode: receive_packet is not supported".to_string()))
     }
 
     async fn close(&mut self) -> Result<(), VpnError> {
-        log_info!("TUN-режим: Закрытие соединения не поддерживается");
+        log_info!("TUN mode: Closing connection is not supported");
         Ok(())
     }
 }
