@@ -113,6 +113,7 @@ cd rustVPN-core
 - http/https/socks4/socks5 proxy support ✔️
 - shadowsocks protocol support ✔️
 - install_linux , install_win64, install_mac bash scripts ❌
+- encryption methods ❌
 
 ## license 
 
