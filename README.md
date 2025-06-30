@@ -49,11 +49,11 @@ cd rustVPN-core
 
 ## TODO:
 
-- CLI interface
-- DPI obfuscation
-- wireguard through shadowsocks
-- http/https/socks4/socks5 proxy support
-- 
+- CLI interface ❌
+- DPI obfuscation ❌
+- wireguard through shadowsocks ❌
+- http/https/socks4/socks5 proxy support ✔️
+- shadowsocks protocol support ✔️
 
 ## license 
 
