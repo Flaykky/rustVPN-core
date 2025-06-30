@@ -75,6 +75,7 @@ src/
 ```bash
 git clone https://github.com/Flaykky/rustVPN-core
 cd rustVPN-core
+./install_linux.sh
 ```
 
 ## Basic WireGuard tunneling
