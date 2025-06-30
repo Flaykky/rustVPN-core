@@ -46,6 +46,15 @@ cd rustVPN-core
 ./VpnCore help
 ```
 
+
+## TODO:
+
+- CLI interface
+- DPI obfuscation
+- wireguard through shadowsocks
+- http/https/socks4/socks5 proxy support
+- 
+
 ## license 
 
 Distributed under the MIT License. See [LICENSE](LICENSE) file for details.
