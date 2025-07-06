@@ -18,57 +18,79 @@ A full VPN client in CLI mode,
 ```text
 src/
 ├── connection/
-│   ├── protocols/
-│   │   ├── proxy/
-│   │   │   ├── http.rs        # HTTP proxy implementation
-│   │   │   ├── https.rs       # HTTPS proxy implementation
-│   │   │   ├── socks4.rs      # SOCKS4 proxy implementation
-│   │   │   ├── socks5.rs      # SOCKS5 proxy implementation
-│   │   │   └── mod.rs         # Exports proxy modules
-│   │   ├── wireguard.rs       # WireGuard protocol implementation
-│   │   ├── shadowsocks.rs     # Shadowsocks protocol implementation
-│   │   ├── openvpn.rs         # OpenVPN protocol implementation
-│   │   ├── basic_tcp.rs       # Generic TCP-based tunneling
-│   │   ├── basic_udp.rs       # Generic UDP-based tunneling
-│   │   ├── plugin.rs          # Plugin interface for custom protocols
-│   │   └── mod.rs             # Exports protocol modules
-│   ├── manager.rs             # Manages connection lifecycle (start, stop, reconnect)
-│   └── mod.rs                 # Exports connection modules
+│ ├── protocols/
+│ │ ├── proxy/
+│ │ │ ├── http.rs # HTTP proxy implementation
+│ │ │ ├── https.rs # HTTPS proxy implementation
+│ │ │ ├── socks4.rs # SOCKS4 proxy implementation
+│ │ │ ├── socks5.rs # SOCKS5 proxy implementation
+│ │ │ └── mod.rs # Exports proxy modules
+│ │ ├── wireguard.rs # WireGuard protocol implementation
+│ │ ├── shadowsocks.rs # Shadowsocks protocol implementation
+│ │ ├── openvpn.rs # OpenVPN protocol implementation
+│ │ ├── basic_tcp.rs # Generic TCP-based tunneling
+│ │ ├── basic_udp.rs # Generic UDP-based tunneling
+│ │ ├── plugin.rs # Plugin interface for custom protocols
+│ │ └── mod.rs # Exports protocol modules
+│ ├── manager.rs # Manages connection lifecycle (start, stop, reconnect)
+│ └── mod.rs # Exports connection modules
 ├── tunneling/
-│   ├── device.rs              # Manages TUN/TAP virtual network interfaces
-│   ├── routing.rs             # Configures OS routing tables and split tunneling
-│   └── mod.rs                 # Exports tunneling modules
+│ ├── device.rs # Manages TUN/TAP virtual network interfaces
+│ ├── routing.rs # Configure OS routing tables and split tunneling
+│ └── mod.rs # Exports tunneling modules
 ├── obfuscation/
-│   ├── dpi_bypass/
-│   │   ├── fragment.rs        # Packet fragmentation to evade DPI
-│   │   ├── masquerade.rs      # Protocol masquerading (e.g., mimic HTTPS)
-│   │   ├── timing.rs          # Randomize packet timing
-│   │   └── mod.rs             # Exports DPI bypass modules
-│   ├── shadowsocks_over_wg.rs # Shadowsocks tunneled through WireGuard
-│   ├── preset.rs              # Predefined obfuscation profiles
-│   └── mod.rs                 # Exports obfuscation modules
+│ ├── dpi_bypass/
+│ │ ├── fragment.rs # Packet fragmentation to bypass DPI
+│ │ ├── masquerade.rs # Protocol masquerade (e.g. HTTPS)
+│ │ ├── timing.rs # Random delays between packets
+│ │ ├── chain.rs # Chain DPI Bypasses (composite pattern)
+│ │ └── mod.rs # Export DPI Bypass modules
+│ ├── protocol_obfuscation/
+│ │ ├── tunnel.rs # Tunneling (e.g. Shadowsocks via WireGuard)
+│ │ ├── header.rs # Header obfuscation (e.g. SIP003/SIP022)
+│ │ ├── encryption.rs # Additional encryption (e.g. AEAD)
+│ │ └── mod.rs # Export protocol obfuscations
+│ ├── timing/
+│ │ ├── jitter.rs # Randomize intervals between packets
+│ │ ├── delay.rs # Artificial delay before sending
+│ │ └── mod.rs # Export timing modules
+│ ├── plugin/
+│ │ ├── loader.rs # Dynamic loading of plugins (v2ray-plugin, etc.)
+│ │ ├── interface.rs # Interface for plugins
+│ │ └── mod.rs # Export plugin modules
+│ ├── preset/
+│ │ ├── basic.rs # Basic profiles (HTTP/HTTPS)
+│ │ ├── advanced.rs # Advanced profiles (SIP003, AEAD, DPI-Bypass)
+│ │ ├── custom.rs # Custom profiles
+│ │ └── mod.rs # Profile export
+│ ├── utils/
+│ │ ├── packet.rs # Utilities for working with packets
+│ │ ├── crypto.rs # Auxiliary cryptographic functions
+│ │ └── mod.rs # Utilities export
+│ ├── common.rs # Common types and errors for obfuscation
+│ └── mod.rs # Global export of all modules
 ├── encryption/
-│   ├── cipher.rs              # Manages encryption algorithms (AES, ChaCha20)
-│   ├── key_manager.rs         # Handles key generation and rotation
-│   └── mod.rs                 # Exports encryption modules
-├── config/
-│   ├── parser.rs              # Parses and validates JSON config files
-│   ├── model.rs               # Structs for config representation
-│   └── mod.rs                 # Exports config modules
-├── utils/
-│   ├── logging.rs             # Configures logging with levels and formats
-│   ├── metrics.rs             # Collects connection stats (bandwidth, latency)
-│   ├── error.rs               # Custom error types
-│   ├── common.rs              # Shared utilities (e.g., IP parsing, base64 helpers)
-│   └── mod.rs                 # Exports utility modules
-├── cli/
-│   ├── commands.rs            # CLI command definitions (connect, add-server, etc.)
-│   ├── interface.rs           # CLI argument parsing and interaction
-│   └── mod.rs                 # Exports CLI modules
+│ ├── cipher.rs # Manages encryption algorithms (AES, ChaCha20)
+│ ├── key_manager.rs # Handles key generation and rotation
+│ └── mod.rs # Exports encryption modules
+├──config/
+│ ├── parser.rs # Parses and validates JSON config files
+│ ├── model.rs # Structs for config representation
+│ └── mod.rs # Exports config modules
+├──utils/
+│ ├── logging.rs # Configures logging with levels and formats
+│ ├── metrics.rs # Collects connection stats (bandwidth, latency)
+│ ├── error.rs # Custom error types
+│ ├── common.rs # Shared utilities (e.g., IP parsing, base64 helpers)
+│ └── mod.rs # Exports utility modules
+├──cli/
+│ ├── commands.rs # CLI command definitions (connect, add-server, etc.)
+│ ├── interface.rs # CLI argument parsing and interaction
+│ └── mod.rs # Exports CLI modules
 ├── plugin/
-│   ├── loader.rs              # Dynamically loads protocol/obfuscation plugins
-│   └── mod.rs                 # Exports plugin modules
-└── main.rs                    # Entry point for CLI application
+│ ├── loader.rs # Dynamically loads protocol/obfuscation plugins
+│ └── mod.rs # Exports plugin modules
+└── main.rs # Entry point for CLI application
 ```
 
 ## levels of cliInterface
