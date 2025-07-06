@@ -2,22 +2,27 @@ use crate::utils::logging::{log_info, log_warn};
 use crate::utils::error::VpnError;
 use std::net::IpAddr;
 
-/// Менеджер для управления маршрутизацией.
+/// Manager for handling routing operations.
 pub struct RoutingManager;
 
 impl RoutingManager {
-    /// Добавляет маршрут для указанного CIDR через TUN-интерфейс.
+    /// Adds a route for the specified CIDR via the given TUN interface.
+    ///
+    /// # Arguments
+    /// * `cidr` - The CIDR block to route (e.g., "192.168.1.0/24").
+    /// * `interface` - The network interface to use (e.g., "tun0").
     pub fn add_route(&self, cidr: &str, interface: &str) -> Result<(), VpnError> {
-        log_info!("Добавление маршрута {} через {}", cidr, interface);
+        log_info!("Adding route {} via {}", cidr, interface);
 
         #[cfg(target_os = "linux")]
         {
+            // Use the `ip` command to add a route on Linux.
             let output = std::process::Command::new("ip")
                 .args(["route", "add", cidr, "dev", interface])
                 .output()
                 .map_err(|e| {
-                    log_warn!("Ошибка выполнения команды: {}", e);
-                    VpnError::TunnelingError(format!("Ошибка добавления маршрута: {}", e))
+                    log_warn!("Command execution error: {}", e);
+                    VpnError::TunnelingError(format!("Failed to add route: {}", e))
                 })?;
 
             if !output.status.success() {
@@ -27,12 +32,13 @@ impl RoutingManager {
 
         #[cfg(target_os = "windows")]
         {
+            // Use the `netsh` command to add a route on Windows.
             let output = std::process::Command::new("netsh")
                 .args(["interface", "ipv4", "add", "route", cidr, interface])
                 .output()
                 .map_err(|e| {
-                    log_warn!("Ошибка выполнения команды: {}", e);
-                    VpnError::TunnelingError(format!("Ошибка добавления маршрута: {}", e))
+                    log_warn!("Command execution error: {}", e);
+                    VpnError::TunnelingError(format!("Failed to add route: {}", e))
                 })?;
 
             if !output.status.success() {
@@ -40,30 +46,38 @@ impl RoutingManager {
             }
         }
 
-        log_info!("Маршрут {} через {} добавлен", cidr, interface);
+        log_info!("Route {} via {} added", cidr, interface);
         Ok(())
     }
 
-    /// Настраивает split-tunneling для указанного CIDR.
+    /// Configures split-tunneling for the specified CIDR.
+    ///
+    /// # Arguments
+    /// * `cidr` - The CIDR block to route through the tunnel.
+    /// * `interface` - The network interface to use.
     pub fn set_split_tunnel(&self, cidr: &str, interface: &str) -> Result<(), VpnError> {
-        log_info!("Настройка Split-Tunneling для {}", cidr);
+        log_info!("Configuring split-tunneling for {}", cidr);
         self.add_route(cidr, interface)?;
-        log_info!("Split-Tunneling настроен для {}", cidr);
+        log_info!("Split-tunneling configured for {}", cidr);
         Ok(())
     }
 
-    /// Очищает все маршруты для указанного интерфейса.
+    /// Flushes all routes for the specified interface.
+    ///
+    /// # Arguments
+    /// * `interface` - The network interface whose routes should be flushed.
     pub fn flush_routes(&self, interface: &str) -> Result<(), VpnError> {
-        log_info!("Очистка маршрутов для интерфейса {}", interface);
+        log_info!("Flushing routes for interface {}", interface);
 
         #[cfg(target_os = "linux")]
         {
+            // Use the `ip` command to flush routes on Linux.
             let output = std::process::Command::new("ip")
                 .args(["route", "flush", "dev", interface])
                 .output()
                 .map_err(|e| {
-                    log_warn!("Ошибка выполнения команды: {}", e);
-                    VpnError::TunnelingError(format!("Ошибка очистки маршрутов: {}", e))
+                    log_warn!("Command execution error: {}", e);
+                    VpnError::TunnelingError(format!("Failed to flush routes: {}", e))
                 })?;
 
             if !output.status.success() {
@@ -73,12 +87,13 @@ impl RoutingManager {
 
         #[cfg(target_os = "windows")]
         {
+            // Use the `netsh` command to delete all routes for the interface on Windows.
             let output = std::process::Command::new("netsh")
                 .args(["interface", "ipv4", "delete", "route", "prefix=::/0", interface])
                 .output()
                 .map_err(|e| {
-                    log_warn!("Ошибка выполнения команды: {}", e);
-                    VpnError::TunnelingError(format!("Ошибка очистки маршрутов: {}", e))
+                    log_warn!("Command execution error: {}", e);
+                    VpnError::TunnelingError(format!("Failed to flush routes: {}", e))
                 })?;
 
             if !output.status.success() {
@@ -86,46 +101,52 @@ impl RoutingManager {
             }
         }
 
-        log_info!("Маршруты для {} очищены", interface);
+        log_info!("Routes for {} flushed", interface);
         Ok(())
     }
 
-    /// Получает список всех маршрутов.
+    /// Retrieves a list of all current routes.
+    ///
+    /// # Returns
+    /// * `Ok(String)` containing the list of routes.
+    /// * `Err(VpnError)` if the command fails or is unsupported.
     pub fn list_routes(&self) -> Result<String, VpnError> {
         #[cfg(target_os = "linux")]
         {
+            // Use the `ip` command to show routes on Linux.
             let output = std::process::Command::new("ip")
                 .args(["route", "show"])
                 .output()
                 .map_err(|e| {
-                    log_warn!("Ошибка выполнения команды: {}", e);
-                    VpnError::TunnelingError(format!("Ошибка получения маршрутов: {}", e))
+                    log_warn!("Command execution error: {}", e);
+                    VpnError::TunnelingError(format!("Failed to get routes: {}", e))
                 })?;
 
             let routes = String::from_utf8_lossy(&output.stdout).to_string();
-            log_info!("Текущие маршруты:\n{}", routes);
+            log_info!("Current routes:\n{}", routes);
             Ok(routes)
         }
 
         #[cfg(target_os = "windows")]
         {
+            // Use the `netsh` command to show routes on Windows.
             let output = std::process::Command::new("netsh")
                 .args(["interface", "ipv4", "show", "routes"])
                 .output()
                 .map_err(|e| {
-                    log_warn!("Ошибка выполнения команды: {}", e);
-                    VpnError::TunnelingError(format!("Ошибка получения маршрутов: {}", e))
+                    log_warn!("Command execution error: {}", e);
+                    VpnError::TunnelingError(format!("Failed to get routes: {}", e))
                 })?;
 
             let routes = String::from_utf8_lossy(&output.stdout).to_string();
-            log_info!("Текущие маршруты:\n{}", routes);
+            log_info!("Current routes:\n{}", routes);
             Ok(routes)
         }
 
         #[cfg(not(any(target_os = "linux", target_os = "windows")))]
         {
-            log_warn!("Система не поддерживается для управления маршрутами");
-            Ok("Маршруты: неподдерживаемая операция".to_string())
+            log_warn!("Route management is not supported on this system");
+            Ok("Routes: unsupported operation".to_string())
         }
     }
 }
@@ -137,8 +158,8 @@ mod tests {
     #[test]
     fn test_add_route() {
         let manager = RoutingManager;
-        // Тестовая команда (требует root)
+        // Test command (requires root/admin privileges)
         let result = manager.add_route("192.168.1.0/24", "tun0");
-        assert!(result.is_ok() || result.unwrap_err().to_string().contains("не найден"));
+        assert!(result.is_ok() || result.unwrap_err().to_string().contains("not found"));
     }
 }
