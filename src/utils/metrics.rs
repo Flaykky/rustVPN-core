@@ -1,11 +1,14 @@
 // src/utils/metrics.rs
 
+/*
+*/
+
 use prometheus::{IntCounter, IntGauge, Histogram, Registry, TextEncoder, Encoder, HistogramOpts};
 use std::sync::Arc;
 use std::time::Instant;
 use log::error;
 
-/// Структура для управления метриками VPN.
+/// Structure for managing VPN metrics.
 pub struct VpnMetrics {
     registry: Registry,
     bytes_sent: IntCounter,
@@ -17,20 +20,20 @@ pub struct VpnMetrics {
 }
 
 impl VpnMetrics {
-    /// Инициализирует новый экземпляр `VpnMetrics` с регистрацией всех метрик.
+    /// Initializes a new instance of `VpnMetrics` and registers all metrics.
     pub fn new() -> Result<Self, prometheus::Error> {
         let registry = Registry::new();
 
-        let bytes_sent = IntCounter::new("vpn_bytes_sent", "Общее количество отправленных байтов")?;
-        let bytes_received = IntCounter::new("vpn_bytes_received", "Общее количество полученных байтов")?;
-        let active_connections = IntGauge::new("vpn_active_connections", "Количество активных соединений")?;
+        let bytes_sent = IntCounter::new("vpn_bytes_sent", "Total number of bytes sent")?;
+        let bytes_received = IntCounter::new("vpn_bytes_received", "Total number of bytes received")?;
+        let active_connections = IntGauge::new("vpn_active_connections", "Number of active connections")?;
         let connection_time = Histogram::with_opts(
-            HistogramOpts::new("vpn_connection_time", "Время подключения в секундах")
+            HistogramOpts::new("vpn_connection_time", "Connection time in seconds")
                 .buckets(vec![0.1, 0.5, 1.0, 5.0, 10.0, 30.0, 60.0]),
         )?;
-        let connection_errors = IntCounter::new("vpn_connection_errors", "Количество ошибок подключения")?;
+        let connection_errors = IntCounter::new("vpn_connection_errors", "Number of connection errors")?;
         let latency = Histogram::with_opts(
-            HistogramOpts::new("vpn_latency", "Латентность в миллисекундах")
+            HistogramOpts::new("vpn_latency", "Latency in milliseconds")
                 .buckets(vec![10.0, 50.0, 100.0, 200.0, 500.0, 1000.0]),
         )?;
 
@@ -52,66 +55,66 @@ impl VpnMetrics {
         })
     }
 
-    /// Увеличивает счетчик отправленных байтов на заданное значение.
+    /// Increases the sent bytes counter by the specified value.
     pub fn increment_bytes_sent(&self, amount: u64) {
         self.bytes_sent.inc_by(amount);
     }
 
-    /// Увеличивает счетчик полученных байтов на заданное значение.
+    /// Increases the received bytes counter by the specified value.
     pub fn increment_bytes_received(&self, amount: u64) {
         self.bytes_received.inc_by(amount);
     }
 
-    /// Увеличивает количество активных соединений на 1.
+    /// Increases the number of active connections by 1.
     pub fn increment_active_connections(&self) {
         self.active_connections.inc();
     }
 
-    /// Уменьшает количество активных соединений на 1.
+    /// Decreases the number of active connections by 1.
     pub fn decrement_active_connections(&self) {
         self.active_connections.dec();
     }
 
-    /// Устанавливает количество активных соединений в заданное значение.
+    /// Sets the number of active connections to the specified value.
     pub fn set_active_connections(&self, value: i64) {
         self.active_connections.set(value);
     }
 
-    /// Начинает отсчет времени подключения, возвращая момент начала.
+    /// Starts the connection timer, returning the start moment.
     pub fn start_connection_timer(&self) -> Instant {
         Instant::now()
     }
 
-    /// Завершает отсчет времени подключения и записывает результат в гистограмму.
+    /// Stops the connection timer and records the result in the histogram.
     pub fn stop_connection_timer(&self, start: Instant) {
         let duration = start.elapsed().as_secs_f64();
         self.connection_time.observe(duration);
     }
 
-    /// Увеличивает счетчик ошибок подключения на 1.
+    /// Increases the connection errors counter by 1.
     pub fn increment_connection_errors(&self) {
         self.connection_errors.inc();
     }
 
-    /// Записывает значение латентности в миллисекундах в гистограмму.
+    /// Records the latency value in milliseconds in the histogram.
     pub fn observe_latency(&self, latency_ms: f64) {
         self.latency.observe(latency_ms);
     }
 
-    /// Возвращает текущие значения метрик в текстовом формате для Prometheus.
+    /// Returns the current metric values in Prometheus text format.
     pub fn expose_metrics(&self) -> String {
         let mut buffer = Vec::new();
         let encoder = TextEncoder::new();
         let metric_families = self.registry.gather();
         if let Err(e) = encoder.encode(&metric_families, &mut buffer) {
-            error!("Ошибка при экспонировании метрик: {}", e);
+            error!("Error exposing metrics: {}", e);
             return String::new();
         }
         String::from_utf8(buffer).unwrap_or_else(|_| String::new())
     }
 }
 
-/// Тесты для проверки корректности работы модуля метрик.
+/// Tests for verifying the correctness of the metrics module.
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -120,7 +123,7 @@ mod tests {
 
     #[test]
     fn test_metrics_initialization() {
-        let metrics = VpnMetrics::new().expect("Ошибка инициализации метрик");
+        let metrics = VpnMetrics::new().expect("Error initializing metrics");
         assert_eq!(metrics.bytes_sent.get(), 0);
         assert_eq!(metrics.bytes_received.get(), 0);
         assert_eq!(metrics.active_connections.get(), 0);
