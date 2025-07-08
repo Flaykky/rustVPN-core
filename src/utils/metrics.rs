@@ -1,7 +1,35 @@
 // src/utils/metrics.rs
 
 /*
+Основные функции:
+- Сбор и экспорт метрик производительности VPN-системы
+- Интеграция с Prometheus для мониторинга
+- Трекинг сетевых показателей и ошибок
+- Измерение времени подключения и задержек
+
+Отслеживаемые метрики:
+1. bytes_sent/bytes_received - трафик
+2. active_connections - текущие подключения
+3. connection_time - время установки соединения
+4. connection_errors - счетчик ошибок
+5. latency - задержки передачи данных
+
+Примеры использования:
+// Инициализация
+let metrics = VpnMetrics::new()?;
+
+// Фиксация трафика
+metrics.increment_bytes_sent(1500);
+
+// Измерение времени подключения
+let start = metrics.start_connection_timer();
+// ... операции подключения ...
+metrics.stop_connection_timer(start);
+
+// Экспорт метрик для Prometheus
+let metrics_data = metrics.expose_metrics();
 */
+
 
 use prometheus::{IntCounter, IntGauge, Histogram, Registry, TextEncoder, Encoder, HistogramOpts};
 use std::sync::Arc;
