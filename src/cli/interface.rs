@@ -1,194 +1,121 @@
-use crate::utils::error::VpnError;
 use crate::config::model::ServerConfig;
-use crate::connection::manager::{ConnectionManager, ConnectionState};
 use crate::connection::manager::ConnectionManager;
-use crate::tunneling::device::TunDevice;
-use crate::utils::common::{read_file_to_string, generate_random_string};
-use std::path::PathBuf;
+use crate::connection::manager::ConnectionState;
+use crate::utils::logging::{log_info, log_debug};
 use std::sync::Arc;
-use tokio::sync::Mutex as TokioMutex;
-use clap::{Command as ClapCommand, Arg, ArgMatches};
-use std::time::SystemTime;
-use std::fmt::Write;
 
-pub enum Command {
-    Connect { config_path: PathBuf, server_tag: String },
-    Disconnect,
-    Status,
-}
+/// Простой минимальный интерфейс CLI
+pub fn render_minimal_interface(
+    server: &ServerConfig,
+    manager: &ConnectionManager,
+    state: &ConnectionState
+) -> Result<(), Box<dyn std::error::Error>> {
+    log_info!("[VPN: {}]", match state {
+        ConnectionState::Connected => "connected",
+        ConnectionState::Connecting => "connecting...",
+        _ => "disconnected"
+    });
 
-pub async fn run(
-    servers: Arc<TokioMutex<Vec<ServerConfig>>>,
-    connection_manager: Arc<TokioMutex<ConnectionManager>>,
-) -> Result<(), VpnError> {
-    let matches = build_cli().get_matches();
+    log_info!("");
+    log_info!("server: {} ({})", server.tag, match &server.protocol {
+        ProtocolConfig::Wireguard(wg) => format!("WireGuard: {}", wg.server_ip),
+        ProtocolConfig::Shadowsocks(ss) => format!("Shadowsocks: {}", ss.server_ip),
+        _ => "Other".to_string()
+    });
+    log_info!("in: {}:{}", 
+        server.protocol.get_server_ip(), 
+        server.protocol.get_server_port()
+    );
+    log_info!("out: {}", server.protocol.get_out_ip().unwrap_or("N/A"));
 
-    match parse_command(&matches)? {
-        Command::Connect { config_path, server_tag } => {
-            connect_command(servers, connection_manager, &config_path, &server_tag).await?;
-        }
-        Command::Disconnect => {
-            disconnect_command(connection_manager).await?;
-        }
-        Command::Status => {
-            status_command(servers, connection_manager).await?;
-        }
-    }
-
-    Ok(())
-}
-
-fn build_cli() -> ClapCommand<'static> {
-    ClapCommand::new("vpn-cli")
-        .version("1.0")
-        .author("VPN Team")
-        .about("Минималистичный CLI для управления VPN")
-        .subcommand_required(true)
-        .subcommand(
-            ClapCommand::new("connect")
-                .about("Подключение к серверу")
-                .arg(Arg::new("config")
-                    .short('c')
-                    .long("config")
-                    .value_name("PATH")
-                    .help("Путь к конфигурационному файлу")
-                    .required(true))
-                .arg(Arg::new("server")
-                    .short('s')
-                    .long("server")
-                    .value_name("TAG")
-                    .help("Тег сервера из конфига")
-                    .required(true)),
-        )
-        .subcommand(
-            ClapCommand::new("disconnect")
-                .about("Отключение от сервера"),
-        )
-        .subcommand(
-            ClapCommand::new("status")
-                .about("Показывает текущий статус подключения"),
-        )
-}
-
-fn parse_command(matches: &ArgMatches) -> Result<Command, VpnError> {
-    if let Some(connect) = matches.subcommand_matches("connect") {
-        let config_path = connect.value_of("config").unwrap().into();
-        let server_tag = connect.value_of("server").unwrap().to_string();
-        return Ok(Command::Connect { config_path, server_tag });
-    }
-
-    if matches.subcommand_matches("disconnect").is_some() {
-        return Ok(Command::Disconnect);
-    }
-
-    if matches.subcommand_matches("status").is_some() {
-        return Ok(Command::Status);
-    }
-
-    Err(VpnError::cli_error("Неизвестная команда"))
-}
-
-async fn connect_command(
-    servers: Arc<TokioMutex<Vec<ServerConfig>>>,
-    manager: Arc<TokioMutex<ConnectionManager>>,
-    config_path: &PathBuf,
-    server_tag: &str,
-) -> Result<(), VpnError> {
-    println!("🔄 Подключение к серверу '{}'...", server_tag);
-
-    // Загрузка конфига (если нужен повторный парсинг)
-    let servers_locked = servers.lock().await;
-    if let Some(server) = servers_locked.iter().find(|s| s.tag == server_tag) {
-        let mut manager_locked = manager.lock().await;
-        manager_locked.connect(server).await?;
-        print_status(server, &manager_locked).await;
-    } else {
-        eprintln!("⚠️ Сервер '{}' не найден в конфиге", server_tag);
-    }
+    // Получаем статистику
+    let stats = manager.get_stats()?;
+    log_info!("status:");
+    log_info!("↑  {} KB     ↓  {} KB     Speed: {} Mbps", 
+        stats.uploaded / 1024,
+        stats.downloaded / 1024,
+        stats.speed / 1_000_000
+    );
 
     Ok(())
 }
 
-async fn disconnect_command(manager: Arc<TokioMutex<ConnectionManager>>) -> Result<(), VpnError> {
-    println!("🔌 Отключение от сервера...");
-    let mut manager_locked = manager.lock().await;
-    manager_locked.disconnect().await?;
-    println!("✅ Отключено");
-    Ok(())
-}
+/// Красивый CLI-интерфейс с рамками и деталями
+pub fn render_pretty_interface(
+    server: &ServerConfig,
+    manager: &ConnectionManager,
+    state: &ConnectionState
+) -> Result<(), Box<dyn std::error::Error>> {
+    // Статус подключения
+    println!("╭── VPN CLIENT ─────────────────────────────╮");
+    println!("│ Status       : {} │", match state {
+        ConnectionState::Connected => "✅ Connected",
+        ConnectionState::Connecting => "🔄 Connecting...",
+        _ => "❌ Disconnected"
+    });
+    
+    // Протокол
+    println!("│ Protocol     : {:<25} │", match &server.protocol {
+        ProtocolConfig::Wireguard(_) => "WireGuard",
+        ProtocolConfig::Shadowsocks(_) => "Shadowsocks",
+        _ => "Other"
+    });
 
-async fn status_command(
-    servers: Arc<TokioMutex<Vec<ServerConfig>>>,
-    manager: Arc<TokioMutex<ConnectionManager>>,
-) -> Result<(), VpnError> {
-    let manager_locked = manager.lock().await;
-    let state = manager_locked.get_state().await;
-
-    match state {
-        ConnectionState::Connected => {
-            let current_server = servers.lock().await.iter().find(|s| s.tag == "default").cloned(); // Упрощенно
-            if let Some(ref server) = current_server {
-                print_status(server, &manager_locked).await;
-            } else {
-                println!("🟢 Подключение установлено, но сервер не определен");
-            }
-        }
-        ConnectionState::Connecting => {
-            println!("⏳ Подключение...");
-        }
-        ConnectionState::Reconnecting => {
-            println!("🔄 Переподключение...");
-        }
-        ConnectionState::Disconnected => {
-            println!("🔴 Не подключено");
-        }
-        ConnectionState::Error(msg) => {
-            eprintln!("❌ Ошибка подключения: {}", msg);
-        }
-    }
-
-    Ok(())
-}
-
-async fn print_status(server: &ServerConfig, manager: &ConnectionManager) {
-    println!("{}\n", get_status_header());
-    println!("Сервер: {} ({})", get_flag(&server.tag), server.protocol);
-    println!("Вход:  {}", server.server_ip);
-    println!("Выход: {}\n", server.server_ip); // Примерное значение
-
-    // Примерные данные (заменить на реальные метрики)
-    let upload = format_data_size(123 * 1024); // 123 KB
-    let download = format_data_size(456 * 1024); // 456 KB
-
-    println!("Статус:");
-    println!("↑  {}     ↓  {}", upload, download);
-    println!();
-}
-
-fn get_status_header() -> String {
-    format!("\x1b[32m[VPN: connected]\x1b[0m")
-}
-
-fn get_flag(tag: &str) -> String {
-    match tag.to_lowercase().as_str() {
-        "sweden" => "🇸🇪".to_string(),
-        "germany" => "🇩🇪".to_string(),
-        "usa" => "🇺🇸".to_string(),
-        _ => "🌐".to_string(),
-    }
-}
-
-fn format_data_size(bytes: usize) -> String {
-    const KB: usize = 1024;
-    const MB: usize = 1024 * KB;
-    const GB: usize = 1024 * MB;
-
-    let (value, suffix) = match bytes {
-        0..=KB => (bytes as f64, "B"),
-        KB..=MB => (bytes as f64 / KB as f64, "KB"),
-        MB..=GB => (bytes as f64 / MB as f64, "MB"),
-        _ => (bytes as f64 / GB as f64, "GB"),
+    // Обфускация (если есть)
+    let obfuscation = match server.obfuscation.as_ref() {
+        Some(oc) => match oc.obfuscation_type {
+            ObfuscationType::ShadowsocksOverWireguard => "Shadowsocks",
+            ObfuscationType::Fragmentation => "Fragmentation",
+            ObfuscationType::Masquerade => "TLS Masquerade",
+            ObfuscationType::CustomPlugin => "Custom Plugin"
+        },
+        None => "Disabled"
     };
+    println!("│ Obfuscation  : {} │", format!("{}{}", 
+        if obfuscation == "Disabled" { "❌ " } else { "✅ " }, 
+        obfuscation
+    ).pad_to_width(25));
 
-    format!("{:.1} {}", value, suffix)
+    // DNS (если настроен)
+    let dns = server.advanced_routing.as_ref()
+        .and_then(|ar| ar.dns.as_ref())
+        .map(|d| d.join(", "))
+        .unwrap_or("Default".to_string());
+    println!("│ Custom DNS   : {:<25} │", dns);
+    println!("╰──────────────────────────────────────────╯");
+    
+    // Информация о сервере
+    println!("╭── Server Info ───────────────────────────╮");
+    println!("│ Location     : {} │", server.custom_tags.iter().find(|t| t.contains("geo-")).map(|t| t.replace("geo-", "")).unwrap_or("Unknown".to_string()));
+    println!("│ Ingress IP   : {}:{} │", server.protocol.get_server_ip(), server.protocol.get_server_port());
+    println!("│ Egress IP    : {} │", server.protocol.get_out_ip().unwrap_or("N/A"));
+    println!("╰──────────────────────────────────────────╯");
+
+    // Трафик
+    let stats = manager.get_stats()?;
+    println!("╭── Traffic ───────────────────────────────╮");
+    println!("│ Uploaded     : {:.2} MB                │", stats.uploaded as f64 / 1024.0 / 1024.0);
+    println!("│ Downloaded   : {:.2} MB                │", stats.downloaded as f64 / 1024.0 / 1024.0);
+    println!("│ Speed        : ↑ {:.2} Mbps / ↓ {:.2} Mbps │", 
+        stats.upload_speed as f64 / 125_000.0,
+        stats.download_speed as f64 / 125_000.0
+    );
+    println!("╰──────────────────────────────────────────╯");
+
+    Ok(())
+}
+
+// Расширение для форматирования текста
+trait FormatUtils {
+    fn pad_to_width(&self, width: usize) -> String;
+}
+
+impl FormatUtils for &str {
+    fn pad_to_width(&self, width: usize) -> String {
+        let mut s = self.to_string();
+        while s.len() < width {
+            s.push(' ');
+        }
+        s
+    }
 }
