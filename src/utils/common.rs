@@ -1,3 +1,41 @@
+/*
+Основные функции:
+- Утилиты общего назначения для VPN-системы
+- Валидация сетевых параметров (IP, порты, CIDR)
+- Кодирование/декодирование данных (Base64, HEX)
+- Криптографические функции (хеширование SHA-256)
+- Генерация случайных данных (пароли, токены)
+- Работа с файлами конфигурации
+- Сетевые преобразования
+
+Ключевые категории:
+1. Валидация: is_valid_ip(), is_valid_port()
+2. Кодирование: encode_base64(), bytes_to_hex()
+3. Криптография: sha256_hash()
+4. Генерация: generate_password()
+5. Файлы: read_file_to_string()
+6. Сеть: parse_socket_addr()
+
+Примеры использования:
+// Генерация пароля
+let password = generate_password(12);
+
+// Валидация CIDR
+if is_valid_cidr("192.168.1.0/24") {
+    // ...
+}
+
+// Чтение конфигурации
+let config = read_file_to_string("config.json")?;
+
+// Хеширование данных
+let hash = sha256_hash(b"secret_data");
+*/
+
+
+
+
+
 use std::net::{IpAddr, SocketAddr};
 use std::path::Path;
 use std::fs::File;
