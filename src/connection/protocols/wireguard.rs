@@ -1,3 +1,42 @@
+/*!
+main features:
+- WireGuard tunnel setup using boringtun (Noise протокол)  
+- Поддержка:
+  1. Декодирования приватного и публичного ключей из Base64
+  2. DNS‑резолвинга пира через tokio::net::lookup_host
+  3. Установки UDP‑сокета (0.0.0.0:0) для обмена зашифрованными пакетами
+  4. Инкапсуляции (encapsulate) и декэпсуляции (decapsulate) через Tunn API
+
+usage examples:
+
+```rust
+use crate::vpn::{WireGuardConfig, WireGuard};
+use crate::utils::error::VpnError;
+
+#[tokio::main]
+async fn main() -> Result<(), VpnError> {
+    // 1. Создаём конфиг с приватным и публичным ключами (Base64) и адресом endpoint
+    let cfg = WireGuardConfig::new(
+        "PRIVATE_KEY_BASE64",
+        "PEER_PUBLIC_KEY_BASE64",
+        "vpn.example.com:51820",
+    );
+    // 2. Инициализируем WireGuard протокол
+    let wg = WireGuard::new(cfg)?;
+    // 3. Подключаемся и получаем объект соединения
+    let mut conn = wg.connect().await?;
+    // 4. Отправляем и получаем пакеты
+    conn.send_packet(&[0x01, 0x02, 0x03]).await?;
+    let resp = conn.receive_packet().await?;
+    println!("Received {} bytes", resp.len());
+    // 5. Закрываем соединение
+    conn.close().await?;
+    Ok(())
+}
+*/
+
+
+
 use crate::utils::logging::{log_debug, log_info, log_warn};
 use crate::utils::error::VpnError;
 use tokio::net::UdpSocket;
