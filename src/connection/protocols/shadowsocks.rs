@@ -1,3 +1,38 @@
+/*
+main features:
+- Shadowsocks struct:
+    • new(server_ip, server_port, password, method, tun_name, tun_addr)
+      – валидирует IP, порт, метод шифрования и параметры TUN;
+- Protocol impl for Shadowsocks:
+    • connect() -> ShadowsocksConnection
+      – формирует ServerConfig и LocalConfig для TUN‑режима;
+      – собирает глобальную Config и запускает run_local() в фоне;
+- ShadowsocksConnection struct:
+    • send_packet / receive_packet
+      – не поддерживаются в TUN‑режиме (возвращают ошибку);
+    • close()
+      – заглушка (всегда Ok);
+
+examples:
+// Инициализация клиента:
+let ss = Shadowsocks::new(
+    "1.2.3.4",       // server_ip
+    8388,            // server_port
+    "your_passwd",   // password
+    "aes-256-gcm",   // method
+    "tun0",          // tun_interface_name
+    "10.0.0.1/24",   // tun_interface_address
+)?;
+
+// Подключение (запускает клиент в фоне):
+let mut conn = ss.connect().await?;
+
+// В TUN‑режиме отправка/прием пакетов не поддерживаются
+// conn.send_packet(&packet).await.unwrap_err();
+*/
+
+
+
 use shadowsocks::config::{Config, LocalConfig, ServerConfig};
 use shadowsocks::run_local;
 use crate::utils::logging::{log_debug, log_info, log_warn};
