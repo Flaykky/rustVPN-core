@@ -100,6 +100,149 @@ src/
 - third: just comfort interface  
 - fourth: most similar to GUI
 
+---
+
+### **1. Minimal interface**
+
+```bash
+[VPN Status] → Connected
+[Server] → 🇨🇭 Switzerland
+[Protocol] → WireGuard
+[IP in/out] → 1.1.1.1:443 → 1.1.1.2
+
+[Net] ↑ 100KB ↓ 250KB Speed: ~50mb/s
+```
+
+**Controls:**
+
+* `vpn connect` / `vpn disconnect`
+* `vpn status`
+* `vpn switch --server=Switzerland`
+
+---
+
+### **2. Almost minimal but nice interface with details**
+
+```bash
+╭─[VPN]─ ... 1.1.1.1:443 │
+│ Exit IP: 1.1.1.2 │
+│ Obfuscation : ✅ Shadowsocks │
+│ Custom DNS: ✅ 1.1.1.1 │
+├────────────────────────── ───────────────────────────┤
+│ ↑ Uploaded : 125KB │
+│ ↓ Downloaded : 3.2MB │
+│ ↔ Speed: ~75mb/s │
+╰─ ...��
+```
+
+---
+
+### **3. Just a nice CLI interface**
+
+```bash
+┌─ ... │
+├────────────────────── ──────────────────────┤
+│ [✓] Connected │
+│ │
+│ 🔹 Server: 🇬🇧 UK, London │
+│ 🔹 Protocol: OpenVPN TCP │
+│ 🔹 Entry IP: 2.1.1.1:1300 │
+│ 🔹 Exit IP: 2.1.1.2 │
+│ │
+│ ⚙ Features: │
+│ [+] Custom DNS: 8.8.8.8 │
+│ [+] Obfuscation: Disabled │
+│ │
+│ 📈 Data: │
+│ ↑ 120KB ↓ 300KB ~60mb/s │
+└────────────────────────────────────────────┘
+```
+
+---
+
+### **4. GUI-like CLI interface**
+
+```bash
+┌─────────────────────────────┐
+│ [main page] [servers] │
+│ [about] │
+└────────────────────────────┘
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+┃ VPN STATUS: CONNECTED ┃
+┃ ┃
+┃ Server: 🇨🇭 Switzerland ┃
+┃ Protocol: WireGuard ┃
+┃ Entry IP: 1.1.1.1:443 ┃
+┃ Exit IP: 1.1.1.2 ┃
+┃ ┃
+┃ [+] Obfuscation: Yes ┃
+┃ [+] Custom DNS: 1.1.1.1 ┃
+┃ [+] Quantum-Resistant: ❌┃
+┃ ┃
+┃ Network Data: ┃
+┃ ↑ Uploaded : 100KB ┃
+┃ ↓ Downloaded : 0KB ┃
+┃ ↔ Speed : [speedTest] ┃
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+#### 🔄 Navigation:
+
+* `Tab`/`← →` — between \[main page], \[servers], \[about], \[speedTest]
+* `↑ ↓` — scroll by elements
+* `Enter` — activation
+
+---
+
+#### 📄 Page `servers`
+
+```bash
+┌──────────────────────────── ────────────────────────────┐
+│ [servers page] [back] │
+└──────────────────────────── ────────────────────────────┘
+
+1.Server: 
+├ Location: 🇨🇭 Switzerland, Zurich 
+├ Entry IP: 1.1.1.1:51902 
+├ Exit IP: 1.1.1.2 
+├Protocol: WireGuard 
+└Features: 
+[+] Custom DNS: 1.1.1.1 
+[+] Obfuscation: Shadowsocks 
+[+] Quantum Resistant: ✅
+
+2.Server: 
+├ Location: 🇬🇧 UK, London 
+├ Entry IP: 2.1.1.1:1300 
+├ Exit IP: 2.1.1.2 
+└ Protocol: OpenVPN TCP
+
+3.Server: 
+├ Location: 🇩🇪 Germany, Frankfurt 
+├ Entry IP: 2.2.1.1:443 
+├ Exit IP: 2.2.1.3 
+└Protocol: V2rayN
+```
+
+---
+
+#### ℹ️ `about` page
+
+```bash
+┌────────────────────────────┐
+│ [about page] [back] │
+└────────────────────────────┘
+
+release: beta 1.0
+
+📎 GitHub Repository:
+https://github.com/yourproject/vpn-cli
+
+
+```
+
+---
 ## installation && building
 
 ### cloning repository 
