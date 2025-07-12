@@ -237,8 +237,7 @@ src/
 release: beta 1.0
 
 📎 GitHub Repository:
-https://github.com/yourproject/vpn-cli
-
+https://github.com/Flaykky/rustVPN-core
 
 ```
 
