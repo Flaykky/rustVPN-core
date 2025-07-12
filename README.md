@@ -206,8 +206,8 @@ src/
 ├ Location: 🇨🇭 Switzerland, Zurich 
 ├ Entry IP: 1.1.1.1:51902 
 ├ Exit IP: 1.1.1.2 
-├Protocol: WireGuard 
-└Features: 
+├ Protocol: WireGuard 
+└ Features: 
 [+] Custom DNS: 1.1.1.1 
 [+] Obfuscation: Shadowsocks 
 [+] Quantum Resistant: ✅
@@ -222,7 +222,7 @@ src/
 ├ Location: 🇩🇪 Germany, Frankfurt 
 ├ Entry IP: 2.2.1.1:443 
 ├ Exit IP: 2.2.1.3 
-└Protocol: V2rayN
+└ Protocol: V2rayN
 ```
 
 ---
