@@ -233,7 +233,7 @@ src/
 
 ```bash
 ┌────────────────────────────┐
-│ [about page] [back] │
+│ [about page] [back]        │
 └────────────────────────────┘
 
 release: beta 1.0
