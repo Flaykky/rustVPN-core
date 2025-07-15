@@ -1,6 +1,6 @@
 # rustVPN-core
 
-A full VPN client in CLI mode, 
+A full VPN client in CLI mode
 
 (core means only logic of connecting)
 
