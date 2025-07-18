@@ -6,7 +6,7 @@ edition = "2024"
 [dependencies]
 boringtun = { git = "https://github.com/cloudflare/boringtun", branch = "master" }
 shadowsocks-rust = { git = "https://github.com/shadowsocks/shadowsocks-rust", tag = "v1.21.0" }
-openvpn = "0.2.2"  # ate; replace with actual if available
+openvpn = "0.2.2"
 openssl = "0.10.66"
 tokio = { version = "1.40.0", features = ["full"] }
 serde = { version = "1.0.210", features = ["derive"] }
