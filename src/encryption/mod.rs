@@ -1,9 +1,9 @@
 pub mod cipher;
 pub mod key;
-pub mod error;
 pub mod traits;
+pub mod error;
 
-pub use cipher::{create_cipher, CipherType};
-pub use key::{KeyManager, store::KeyStore};
-pub use error::EncryptionError;
-pub use traits::{AsyncCipher, AeadCipher};
+pub use cipher::CipherFactory;
+pub use key::KeyManager;
+pub use traits::{AeadCipher, AsyncCipher, StreamCipher, KeyDerivable};
+pub use error::CipherError;
