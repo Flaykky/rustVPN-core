@@ -1,47 +1,65 @@
 use crate::utils::error::VpnError;
-use crate::utils::logging::{log_info, log_warn};
-use crate::encryption::key::store::KeyStore;
-use crate::encryption::key::kdf::generate_random_key;
+use crate::encryption::traits::AeadCipher;
+use crate::encryption::cipher::CipherFactory;
+use std::collections::HashMap;
+use std::sync::{Arc, Mutex};
 
-/// Менеджер для управления ключами
+/// Thread-safe storage for cryptographic keys
+#[derive(Default)]
 pub struct KeyManager {
-    store: KeyStore,
+    keys: Mutex<HashMap<String, Vec<u8>>>,
 }
 
 impl KeyManager {
+    /// Creates a new key manager
     pub fn new() -> Self {
         Self {
-            store: KeyStore::new(),
+            keys: Mutex::new(HashMap::new()),
         }
     }
 
-    /// Генерирует и сохраняет ключ
-    pub fn generate_key(&mut self, name: &str, method: &str, tags: Vec<String>) -> Result<(), VpnError> {
-        log_info!("Генерация ключа {}", name);
-        let key_size = match method {
-            "aes-128-gcm" => 16,
-            "aes-256-gcm" => 32,
-            "chacha20-ietf-poly1305" => 32,
-            "2022-blake3-aes-256-gcm" => 64, // SIP022: 64-байтный ключ
-            _ => return Err(VpnError::EncryptionError(EncryptionError::InvalidMethod(method.to_string()))),
-        };
-        let key = generate_random_key(key_size)?;
-        self.store.add_key(name, key, None, tags);
+    /// Adds a key to the manager
+    pub fn add_key(&self, name: &str, key: Vec<u8>) {
+        self.keys.lock().unwrap().insert(name.to_string(), key);
+    }
+
+    /// Retrieves a key by name
+    pub fn get_key(&self, name: &str) -> Result<Vec<u8>, VpnError> {
+        self.keys
+            .lock()
+            .unwrap()
+            .get(name)
+            .cloned()
+            .ok_or_else(|| VpnError::EncryptionError("Key not found".to_string()))
+    }
+
+    /// Creates a cipher from a stored key
+    pub fn create_aead(
+        &self,
+        name: &str,
+        method: &str,
+    ) -> Result<Box<dyn AeadCipher + Send + Sync>, VpnError> {
+        let key = self.get_key(name)?;
+        CipherFactory::create_aead(method, &key)
+    }
+
+    /// Checks if a key exists
+    pub fn has_key(&self, name: &str) -> bool {
+        self.keys.lock().unwrap().contains_key(name)
+    }
+
+    /// Removes a key
+    pub fn remove_key(&self, name: &str) -> Result<(), VpnError> {
+        self.keys
+            .lock()
+            .unwrap()
+            .remove(name)
+            .ok_or_else(|| VpnError::EncryptionError("Key not found".to_string()))?;
         Ok(())
     }
 
-    /// Получает ключ по имени
-    pub fn get_key(&self, name: &str) -> Result<Vec<u8>, VpnError> {
-        self.store.get_key(name).map(|k| k.to_vec())
-    }
-
-    /// Очищает истёкшие ключи
-    pub fn clear_expired_keys(&mut self) {
-        self.store.clear_expired();
-    }
-
-    /// Устанавливает ключ по умолчанию
-    pub fn set_default_key(&mut self, name: &str) -> Result<(), VpnError> {
-        self.store.set_default(name)
+    /// Clears all keys
+    pub fn clear(&self) {
+        self.keys.lock().unwrap().clear();
     }
 }
