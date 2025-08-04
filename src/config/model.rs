@@ -82,10 +82,10 @@ impl WireGuardConfig {
         if self.endpoint_ip.parse::<IpAddr>().is_err() {
             return Err("Неверный IP-адрес сервера WireGuard".to_string());
         }
-        if self.endpoint_port == 0  self.endpoint_port > 65535 {
+        if self.endpoint_port == 0 || self.endpoint_port > 65535 {
             return Err("Неверный порт сервера WireGuard".to_string());
         }
-        if self.wireguard_private_key.is_empty()  self.wireguard_public_key.is_empty() {
+        if self.wireguard_private_key.is_empty() || self.wireguard_public_key.is_empty() {
             return Err("Отсутствуют ключи WireGuard".to_string());
         }
         Ok(())
@@ -112,10 +112,10 @@ impl ShadowsocksConfig {
         if self.server_ip.parse::<IpAddr>().is_err() {
             return Err("Неверный IP-адрес сервера Shadowsocks".to_string());
         }
-        if self.server_port == 0  self.server_port > 65535 {
+        if self.server_port == 0 || self.server_port > 65535 {
             return Err("Неверный порт сервера Shadowsocks".to_string());
         }
-        if self.password.is_empty()  self.method.is_empty() {
+        if self.password.is_empty() || self.method.is_empty() {
             return Err("Отсутствует пароль или метод шифрования".to_string());
         }
         Ok(())
@@ -142,13 +142,13 @@ impl ProxyConfig {
         if self.proxy_ip.parse::<IpAddr>().is_err() {
             return Err("Неверный IP-адрес прокси".to_string());
         }
-        if self.proxy_port == 0  self.proxy_port > 65535 {
+        if self.proxy_port == 0 || self.proxy_port > 65535 {
             return Err("Неверный порт прокси".to_string());
         }
         if self.target_ip.parse::<IpAddr>().is_err() {
             return Err("Неверный целевой IP".to_string());
         }
-        if self.target_port == 0  self.target_port > 65535 {
+        if self.target_port == 0 || self.target_port > 65535 {
             return Err("Неверный целевой порт".to_string());
         }
         Ok(())
