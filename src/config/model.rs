@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use ipnetwork::IpNetwork;
 use std::str::FromStr;
 
-/// Типы поддерживаемых протоколов
+/// Supported protocol types
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
 pub enum ProtocolType {
@@ -16,7 +16,7 @@ pub enum ProtocolType {
     Plugin(String),
 }
 
-/// Типы обфускации
+/// Obfuscation types
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ObfuscationConfig {
     #[serde(rename = "type")]
@@ -27,7 +27,7 @@ pub struct ObfuscationConfig {
     pub plugin_options: HashMap<String, String>,
 }
 
-/// Настройки маршрутизации
+/// Routing settings
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct RouteConfig {
     pub destination: String,
@@ -40,7 +40,7 @@ pub struct AdvancedRoutingConfig {
     pub routes: Vec<RouteConfig>,
 }
 
-/// Базовая конфигурация сервера
+/// Basic server configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ServerConfig {
     pub tag: String,
@@ -60,7 +60,7 @@ pub struct ServerConfig {
     pub custom_tags: Option<Vec<String>>,
 }
 
-/// Конфигурация для WireGuard
+/// WireGuard configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WireGuardConfig {
     #[serde(rename = "server_ip")]
@@ -80,19 +80,19 @@ pub struct WireGuardConfig {
 impl WireGuardConfig {
     pub fn validate(&self) -> Result<(), String> {
         if self.endpoint_ip.parse::<IpAddr>().is_err() {
-            return Err("Неверный IP-адрес сервера WireGuard".to_string());
+            return Err("Invalid WireGuard server IP address".to_string());
         }
         if self.endpoint_port == 0 || self.endpoint_port > 65535 {
-            return Err("Неверный порт сервера WireGuard".to_string());
+            return Err("Invalid WireGuard server port".to_string());
         }
         if self.wireguard_private_key.is_empty() || self.wireguard_public_key.is_empty() {
-            return Err("Отсутствуют ключи WireGuard".to_string());
+            return Err("Missing WireGuard keys".to_string());
         }
         Ok(())
     }
 }
 
-/// Конфигурация для Shadowsocks
+/// Shadowsocks configuration
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ShadowsocksConfig {
     #[serde(rename = "server_ip")]
@@ -110,19 +110,19 @@ pub struct ShadowsocksConfig {
 impl ShadowsocksConfig {
     pub fn validate(&self) -> Result<(), String> {
         if self.server_ip.parse::<IpAddr>().is_err() {
-            return Err("Неверный IP-адрес сервера Shadowsocks".to_string());
+            return Err("Invalid Shadowsocks server IP address".to_string());
         }
         if self.server_port == 0 || self.server_port > 65535 {
-            return Err("Неверный порт сервера Shadowsocks".to_string());
+            return Err("Invalid Shadowsocks server port".to_string());
         }
         if self.password.is_empty() || self.method.is_empty() {
-            return Err("Отсутствует пароль или метод шифрования".to_string());
+            return Err("Missing password or encryption method".to_string());
         }
         Ok(())
     }
 }
 
-/// Конфигурация прокси (HTTP/SOCKS5)
+/// Proxy configuration (HTTP/SOCKS5)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ProxyConfig {
     #[serde(rename = "proxy_ip")]
@@ -140,22 +140,22 @@ pub struct ProxyConfig {
 impl ProxyConfig {
     pub fn validate(&self) -> Result<(), String> {
         if self.proxy_ip.parse::<IpAddr>().is_err() {
-            return Err("Неверный IP-адрес прокси".to_string());
+            return Err("Invalid proxy IP address".to_string());
         }
         if self.proxy_port == 0 || self.proxy_port > 65535 {
-            return Err("Неверный порт прокси".to_string());
+            return Err("Invalid proxy port".to_string());
         }
         if self.target_ip.parse::<IpAddr>().is_err() {
-            return Err("Неверный целевой IP".to_string());
+            return Err("Invalid target IP".to_string());
         }
         if self.target_port == 0 || self.target_port > 65535 {
-            return Err("Неверный целевой порт".to_string());
+            return Err("Invalid target port".to_string());
         }
         Ok(())
     }
 }
 
-/// Полная конфигурация WireGuard (формат .conf)
+/// Full WireGuard configuration (.conf format)
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WireGuardConfConfig {
     #[serde(rename = "Interface")]
@@ -181,19 +181,19 @@ pub struct PeerSection {
 impl WireGuardConfConfig {
     pub fn validate(&self) -> Result<(), String> {
         if self.interface.private_key.is_none() {
-            return Err("Отсутствует приватный ключ в секции [Interface]".to_string());
+            return Err("Missing private key in [Interface] section".to_string());
         }
         if self.peer.public_key.is_none() {
-            return Err("Отсутствует публичный ключ в секции [Peer]".to_string());
+            return Err("Missing public key in [Peer] section".to_string());
         }
         if self.peer.endpoint.is_none() {
-            return Err("Отсутствует endpoint в секции [Peer]".to_string());
+            return Err("Missing endpoint in [Peer] section".to_string());
         }
         Ok(())
     }
 }
 
-/// Перечисление для всех типов конфигураций
+/// Enum for all configuration types
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "protocol", rename_all = "lowercase")]
 pub enum ProtocolConfig {
@@ -219,14 +219,14 @@ pub enum ProtocolConfig {
     },
 }
 
-/// Основная структура конфига
+/// Main config structure
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Config {
     #[serde(flatten)]
     pub servers: HashMap<String, ServerConfig>,
 }
 
-/// Поддержка WireGuard .conf формата
+/// Support for WireGuard .conf format
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct WireGuardConf {
     #[serde(rename = "Interface")]
@@ -234,4 +234,3 @@ pub struct WireGuardConf {
     #[serde(rename = "Peer")]
     pub peer: PeerSection,
 }
-
