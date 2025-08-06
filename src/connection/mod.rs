@@ -3,9 +3,10 @@ pub mod manager;
 
 pub use protocols::{
     Protocol, Connection, ProtocolType,
-    BasicTcp, BasicUdp,
+    TCP, UDP, quic, 
     WireGuard, Shadowsocks, OpenVpn,
     HttpProxy, Socks5Proxy,
     PluginLoader, PluginProtocol, PluginConnection,
 };
 pub use manager::ConnectionManager;
+
