@@ -18,18 +18,18 @@ rustVPN-core/
 ├── src/
 │
 │   ├── cli/                         # CLI-interfaces
-│   │   ├── interface.rs             # Парсинг аргументов
-│   │   ├── handler.rs               # Обработка CLI-команд
-│   │   ├── output.rs                # Форматированный вывод, UI
+│   │   ├── interface.rs             # Parsing arguments
+│   │   ├── handler.rs               # Work with cli commands 
+│   │   ├── output.rs                # Format output and etc
 │   │   └── mod.rs
 │
-│   ├── core/                        # Основная логика
-│   │   ├── controller.rs            # Запуск/остановка VPN
-│   │   ├── state.rs                 # Runtime-состояние
-│   │   ├── lifecycle.rs             # Инициализация, graceful shutdown
+│   ├── core/                        # Main logic
+│   │   ├── controller.rs            # Start/stop VPN
+│   │   ├── state.rs                 # Runtime-status
+│   │   ├── lifecycle.rs             # Initialization, graceful shutdown
 │   │   └── mod.rs
 │
-│   ├── config/                      # Загрузка и парсинг конфигов
+│   ├── config/                      # Load and pars configs
 │   │   ├── loader.rs
 │   │   ├── parser.rs
 │   │   ├── model.rs
@@ -48,7 +48,7 @@ rustVPN-core/
 │   │   │   ├── shadowsocks.rs
 │   │   │   ├── plugin.rs
 │   │   │   └── mod.rs
-│   │   ├── proxy/                   # Прокси-протоколы
+│   │   ├── proxy/                   # Proxy protocols
 │   │   │   ├── http.rs
 │   │   │   ├── https.rs
 │   │   │   ├── socks4.rs
@@ -89,7 +89,7 @@ rustVPN-core/
 │
 │   ├── obfuscation/                # DPI-byoass
 │   │   ├── wrappers/               # UDP-over-TCP, udp2raw, obfs4
-│   │   │   ├── udp_over_tcp.rs
+│   │   │   ├── wireguard2tcp.rs
 │   │   │   ├── udp2raw.rs
 │   │   │   ├── quic_wrap.rs
 │   │   │   └── mod.rs
@@ -111,14 +111,14 @@ rustVPN-core/
 │
 │   ├── tunneling/                  # Virtual devices
 │   │   ├── device.rs               # TUN/TAP
-│   │   ├── routing.rs              # Таблицы маршрутов
+│   │   ├── routing.rs              # Tables routes
 │   │   └── mod.rs
 │
-│   ├── plugin/                     # Общий plugin API
+│   ├── plugin/                     # Main plugin API
 │   │   ├── loader.rs
 │   │   └── mod.rs
 │
-│   ├── utils/                      # Общие утилиты
+│   ├── utils/                      # Main utils
 │   │   ├── logging.rs                
 │   │   ├── error.rs
 │   │   ├── metrics.rs
