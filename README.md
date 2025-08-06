@@ -5,9 +5,10 @@ A full VPN client in CLI mode.
 ## Features
 - Works in CLI
 - Popular protocols support (wireguard, openVPN, shadowsocks)
-- DPI bypassing by obfuscations
+- DPI bypassing by obfuscations (udp2raw)
 - Proxy support
 - Many cli-interface modes
+- 
 
 ## Struct of project
 ```text
