@@ -14,81 +14,123 @@ A full VPN client in CLI mode.
 
 ## Struct of project
 ```text
-src/
-├── connection/
-│ ├── protocols/
-│ │ ├── proxy/
-│ │ │ ├── http.rs # HTTP proxy implementation
-│ │ │ ├── https.rs # HTTPS proxy implementation
-│ │ │ ├── socks4.rs # SOCKS4 proxy implementation
-│ │ │ ├── socks5.rs # SOCKS5 proxy implementation
-│ │ │ └── mod.rs # Exports proxy modules
-│ │ ├── wireguard.rs # WireGuard protocol implementation
-│ │ ├── shadowsocks.rs # Shadowsocks protocol implementation
-│ │ ├── openvpn.rs # OpenVPN protocol implementation
-│ │ ├── basic_tcp.rs # Generic TCP-based tunneling
-│ │ ├── basic_udp.rs # Generic UDP-based tunneling
-│ │ ├── plugin.rs # Plugin interface for custom protocols
-│ │ └── mod.rs # Exports protocol modules
-│ ├── manager.rs # Manages connection lifecycle (start, stop, reconnect)
-│ └── mod.rs # Exports connection modules
-├── tunneling/
-│ ├── device.rs # Manages TUN/TAP virtual network interfaces
-│ ├── routing.rs # Configure OS routing tables and split tunneling
-│ └── mod.rs # Exports tunneling modules
-├── obfuscation/
-│ ├── dpi_bypass/
-│ │ ├── fragment.rs # Packet fragmentation to bypass DPI
-│ │ ├── masquerade.rs # Protocol masquerade (e.g. HTTPS)
-│ │ ├── timing.rs # Random delays between packets
-│ │ ├── chain.rs # Chain DPI Bypasses (composite pattern)
-│ │ └── mod.rs # Export DPI Bypass modules
-│ ├── protocol_obfuscation/
-│ │ ├── tunnel.rs # Tunneling (e.g. Shadowsocks via WireGuard)
-│ │ ├── header.rs # Header obfuscation (e.g. SIP003/SIP022)
-│ │ ├── encryption.rs # Additional encryption (e.g. AEAD)
-│ │ └── mod.rs # Export protocol obfuscations
-│ ├── timing/
-│ │ ├── jitter.rs # Randomize intervals between packets
-│ │ ├── delay.rs # Artificial delay before sending
-│ │ └── mod.rs # Export timing modules
-│ ├── plugin/
-│ │ ├── loader.rs # Dynamic loading of plugins (v2ray-plugin, etc.)
-│ │ ├── interface.rs # Interface for plugins
-│ │ └── mod.rs # Export plugin modules
-│ ├── preset/
-│ │ ├── basic.rs # Basic profiles (HTTP/HTTPS)
-│ │ ├── advanced.rs # Advanced profiles (SIP003, AEAD, DPI-Bypass)
-│ │ ├── custom.rs # Custom profiles
-│ │ └── mod.rs # Profile export
-│ ├── utils/
-│ │ ├── packet.rs # Utilities for working with packets
-│ │ ├── crypto.rs # Auxiliary cryptographic functions
-│ │ └── mod.rs # Utilities export
-│ ├── common.rs # Common types and errors for obfuscation
-│ └── mod.rs # Global export of all modules
-├── encryption/
-│ ├── cipher.rs # Manages encryption algorithms (AES, ChaCha20)
-│ ├── key_manager.rs # Handles key generation and rotation
-│ └── mod.rs # Exports encryption modules
-├──config/
-│ ├── parser.rs # Parses and validates JSON config files
-│ ├── model.rs # Structs for config representation
-│ └── mod.rs # Exports config modules
-├──utils/
-│ ├── logging.rs # Configures logging with levels and formats
-│ ├── metrics.rs # Collects connection stats (bandwidth, latency)
-│ ├── error.rs # Custom error types
-│ ├── common.rs # Shared utilities (e.g., IP parsing, base64 helpers)
-│ └── mod.rs # Exports utility modules
-├──cli/
-│ ├── commands.rs # CLI command definitions (connect, add-server, etc.)
-│ ├── interface.rs # CLI argument parsing and interaction
-│ └── mod.rs # Exports CLI modules
-├── plugin/
-│ ├── loader.rs # Dynamically loads protocol/obfuscation plugins
-│ └── mod.rs # Exports plugin modules
-└── main.rs # Entry point for CLI application
+rustVPN-core/
+├── src/
+│
+│   ├── cli/                         # CLI-interfaces
+│   │   ├── interface.rs             # Парсинг аргументов
+│   │   ├── handler.rs               # Обработка CLI-команд
+│   │   ├── output.rs                # Форматированный вывод, UI
+│   │   └── mod.rs
+│
+│   ├── core/                        # Основная логика
+│   │   ├── controller.rs            # Запуск/остановка VPN
+│   │   ├── state.rs                 # Runtime-состояние
+│   │   ├── lifecycle.rs             # Инициализация, graceful shutdown
+│   │   └── mod.rs
+│
+│   ├── config/                      # Загрузка и парсинг конфигов
+│   │   ├── loader.rs
+│   │   ├── parser.rs
+│   │   ├── model.rs
+│   │   └── mod.rs
+│
+│   ├── connection/                  # Connections and protocols 
+│   │   ├── manager.rs               # Session manager 
+│   │   ├── transport/               # Transport 
+│   │   │   ├── tcp.rs
+│   │   │   ├── udp.rs
+│   │   │   ├── quic.rs              # QUIC transport
+│   │   │   └── mod.rs
+│   │   ├── protocols/               # VPN-protocols 
+│   │   │   ├── wireguard.rs
+│   │   │   ├── openvpn.rs
+│   │   │   ├── shadowsocks.rs
+│   │   │   ├── plugin.rs
+│   │   │   └── mod.rs
+│   │   ├── proxy/                   # Прокси-протоколы
+│   │   │   ├── http.rs
+│   │   │   ├── https.rs
+│   │   │   ├── socks4.rs
+│   │   │   ├── socks5.rs
+│   │   │   └── mod.rs
+│   │   └── mod.rs
+│
+│   ├── encryption/                 # Ciphers 
+│   │   ├── cipher/                 # AES, ChaCha, AEAD and etc.
+│   │   │   ├── aes-128-cfb.rs 
+│   │   │   ├── aes-128-cfb1.rs 
+│   │   │   ├── aes-128-cfb128.rs 
+│   │   │   ├── aes-128-cfb8.rs 
+│   │   │   ├── aes-128-gcm.rs 
+│   │   │   ├── aes-128-pmac-siv.rs 
+│   │   │   ├── aes-256-cfb.rs 
+│   │   │   ├── aes-256-cfb1.rs 
+│   │   │   ├── aes-256-cfb128.rs 
+│   │   │   ├── aes-256-cfb8.rs 
+│   │   │   ├── aes-256-gcm.rs 
+│   │   │   ├── aes-256-pmac-siv.rs 
+│   │   │   ├── cacha20.rs 
+│   │   │   ├── cacha20-ietf.rs 
+│   │   │   ├── cacha20-ietf-poly1305.rs 
+│   │   │   ├── rc4.rs 
+│   │   │   ├── rc4-md5.rs 
+│   │   │   ├── sasla20.rs 
+│   │   │   ├── xcacha20-ietf-poly1305.rs 
+│   │   │   └── mod.rs 
+│   │   ├── key/                    # KDF, key manager
+│   │   │   ├── kdf.rs 
+│   │   │   ├── manager.rs
+│   │   │   ├── mod.rs 
+│   │   │   └── store.rs
+│   │   ├── traits.rs
+│   │   ├── error.rs
+│   │   └── mod.rs
+│
+│   ├── obfuscation/                # DPI-byoass
+│   │   ├── wrappers/               # UDP-over-TCP, udp2raw, obfs4
+│   │   │   ├── udp_over_tcp.rs
+│   │   │   ├── udp2raw.rs
+│   │   │   ├── quic_wrap.rs
+│   │   │   └── mod.rs
+│   │   ├── dpi/                    # DPI techniques
+│   │   │   ├── fragment.rs
+│   │   │   ├── protocol_shift.rs
+│   │   │   ├── timing.rs
+│   │   │   ├── masquerade.rs
+│   │   │   └── mod.rs
+│   │   ├── plugin/                 # loader third party plugins 
+│   │   │   ├── interface.rs
+│   │   │   ├── loader.rs
+│   │   │   └── mod.rs
+│   │   ├── utils/                  # utils 
+│   │   │   ├── packet.rs
+│   │   │   ├── crypto.rs
+│   │   │   └── mod.rs
+│   │   └── mod.rs
+│
+│   ├── tunneling/                  # Virtual devices
+│   │   ├── device.rs               # TUN/TAP
+│   │   ├── routing.rs              # Таблицы маршрутов
+│   │   └── mod.rs
+│
+│   ├── plugin/                     # Общий plugin API
+│   │   ├── loader.rs
+│   │   └── mod.rs
+│
+│   ├── utils/                      # Общие утилиты
+│   │   ├── logging.rs                
+│   │   ├── error.rs
+│   │   ├── metrics.rs
+│   │   └── mod.rs
+│
+│   ├── lib.rs
+│   └── main.rs
+│
+├── Cargo.toml
+├── Cargo.lock
+├── README.md
+└── LICENSE
 ```
 
 ## levels of cliInterface
