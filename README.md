@@ -3,14 +3,11 @@
 A full VPN client in CLI mode.
 
 ## Features
-- Basic TCP&UDP tunneling
-- Connect with HTTPS proxies
-- Cross-platform support (Windows/Linux)
-- obfuscation (udp over tcp, comming soon: mine own obfuscation against dpi)
-- Shadowsocks protocol support
-- PFS support
-- WireGuard protocol support
-- smart defence against DPI
+- Works in CLI
+- Popular protocols support (wireguard, openVPN, shadowsocks)
+- DPI bypassing by obfuscations
+- Proxy support
+- Many cli-interface modes
 
 ## Struct of project
 ```text
@@ -56,28 +53,18 @@ rustVPN-core/
 │   │   │   └── mod.rs
 │   │   └── mod.rs
 │
-│   ├── encryption/                 # Ciphers 
-│   │   ├── cipher/                 # AES, ChaCha, AEAD and etc.
-│   │   │   ├── aes-128-cfb.rs 
-│   │   │   ├── aes-128-cfb1.rs 
-│   │   │   ├── aes-128-cfb128.rs 
-│   │   │   ├── aes-128-cfb8.rs 
-│   │   │   ├── aes-128-gcm.rs 
-│   │   │   ├── aes-128-pmac-siv.rs 
-│   │   │   ├── aes-256-cfb.rs 
-│   │   │   ├── aes-256-cfb1.rs 
-│   │   │   ├── aes-256-cfb128.rs 
-│   │   │   ├── aes-256-cfb8.rs 
-│   │   │   ├── aes-256-gcm.rs 
-│   │   │   ├── aes-256-pmac-siv.rs 
-│   │   │   ├── cacha20.rs 
-│   │   │   ├── cacha20-ietf.rs 
-│   │   │   ├── cacha20-ietf-poly1305.rs 
-│   │   │   ├── rc4.rs 
-│   │   │   ├── rc4-md5.rs 
-│   │   │   ├── sasla20.rs 
-│   │   │   ├── xcacha20-ietf-poly1305.rs 
-│   │   │   └── mod.rs 
+│   ├── encryption
+│   │   ├── cipher
+│   │   │   ├── aes
+│   │   │   │   ├── cfb.rs
+│   │   │   │   ├── gcm.rs
+│   │   │   │   ├── mod.rs
+│   │   │   │   └── pmac-siv.rs
+│   │   │   └── stream
+│   │   │       ├── chacha.rs
+│   │   │       ├── mod.rs
+│   │   │       ├── rc4.rs
+│   │   │       └── salsa.rs
 │   │   ├── key/                    # KDF, key manager
 │   │   │   ├── kdf.rs 
 │   │   │   ├── manager.rs
@@ -142,149 +129,8 @@ rustVPN-core/
 
 ---
 
-### **1. Minimal interface**
-
-```bash
-[VPN Status] → Connected
-[Server] → 🇨🇭 Switzerland
-[Protocol] → WireGuard
-[IP in/out] → 1.1.1.1:443 → 1.1.1.2
-
-[Net] ↑ 100KB ↓ 250KB Speed: ~50mb/s
-```
-
-**Controls:**
-
-* `vpn connect` / `vpn disconnect`
-* `vpn status`
-* `vpn switch --server=Switzerland`
-
 ---
-
-### **2. Almost minimal but nice interface with details**
-
-```bash
-╭─[VPN]─ ... 1.1.1.1:443 │
-│ Exit IP: 1.1.1.2 │
-│ Obfuscation : ✅ Shadowsocks │
-│ Custom DNS: ✅ 1.1.1.1 │
-├────────────────────────── ───────────────────────────┤
-│ ↑ Uploaded : 125KB │
-│ ↓ Downloaded : 3.2MB │
-│ ↔ Speed: ~75mb/s │
-╰─ ...��
-```
-
----
-
-### **3. Just a nice CLI interface**
-
-```bash
-┌─ ... │
-├────────────────────── ──────────────────────┤
-│ [✓] Connected                              │
-│ │
-│ 🔹 Server: 🇬🇧 UK, London │
-│ 🔹 Protocol: OpenVPN TCP │
-│ 🔹 Entry IP: 2.1.1.1:1300 │
-│ 🔹 Exit IP: 2.1.1.2 │
-│ │
-│ ⚙ Features: │
-│ [+] Custom DNS: 8.8.8.8 │
-│ [+] Obfuscation: Disabled │
-│ │
-│ 📈 Data: │
-│ ↑ 120KB ↓ 300KB ~60mb/s │
-└────────────────────────────────────────────┘
-```
-
----
-
-### **4. GUI-like CLI interface**
-
-```bash
-┌────────────────────────────┐
-│ [main page]  [servers]     │
-│ [about]                    │
-└────────────────────────────┘
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-┃ VPN STATUS: CONNECTED     ┃
-┃                          ┃
-┃ Server: 🇨🇭 Switzerland    ┃
-┃ Protocol: WireGuard       ┃
-┃ Entry IP: 1.1.1.1:443     ┃
-┃ Exit IP:  1.1.1.2         ┃
-┃                          ┃
-┃ [+] Obfuscation: Yes      ┃
-┃ [+] Custom DNS: 1.1.1.1   ┃
-┃ [+] Quantum-Resistant: ❌┃
-┃                          ┃
-┃ Network Data:            ┃
-┃   ↑ Uploaded   : 100 KB   ┃
-┃   ↓ Downloaded : 0 KB     ┃
-┃   ↔ Speed      : [speedTest] ┃
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-```
-
-#### 🔄 Navigation:
-
-* `Tab`/`← →` — between \[main page], \[servers], \[about], \[speedTest]
-* `↑ ↓` — scroll by elements
-* `Enter` — activation
-
----
-
-#### 📄 Page `servers`
-
-```bash
-┌────────────────────────────────────────────────────────┐
-│ [servers page]                              [back]     │
-└────────────────────────────────────────────────────────┘
-
-1. Server:
- ├ Location : 🇨🇭 Switzerland, Zurich
- ├ Entry IP : 1.1.1.1:51902
- ├ Exit IP  : 1.1.1.2
- ├ Protocol : WireGuard
- └ Features :
-     [+] Custom DNS: 1.1.1.1
-     [+] Obfuscation: Shadowsocks
-     [+] Quantum Resistant: ✅
-
-2. Server:
- ├ Location : 🇬🇧 UK, London
- ├ Entry IP : 2.1.1.1:1300
- ├ Exit IP  : 2.1.1.2
- └ Protocol : OpenVPN TCP
-
-3. Server:
- ├ Location : 🇩🇪 Germany, Frankfurt
- ├ Entry IP : 2.2.1.1:443
- ├ Exit IP  : 2.2.1.3
- └ Protocol : V2rayN
-
-```
-
-
-
-#### ℹ️ `about` page
-
-```bash
-┌────────────────────────────┐
-│ [about page] [back]        │
-└────────────────────────────┘
-
-release: beta 1.0
-
-📎 GitHub Repository:
-https://github.com/Flaykky/rustVPN-core
-
-```
-
----
-## installation && building
+## installation && building [COMMING SOON]
 
 ### cloning repository 
 ```bash
@@ -342,13 +188,13 @@ for windows (64, x86):
 
 ## TODO
 
-- CLI interface ❌
+- CLI interfaces ❌
 - DPI obfuscations ❌
 - wireguard through shadowsocks obfuscation ❌
 - http/https/socks4/socks5 proxy support ✔️
 - shadowsocks protocol support ✔️
-- install_linux , install_win64, install_mac bash scripts for installations ❌
-- encryption methods ❌
+- install_linux , install_win64, install_mac shell scripts for installations ❌
+- encryption methods ✔️
 - openvpn protocol support ❌
 
 ## license 
