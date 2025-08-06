@@ -28,6 +28,10 @@ smoltcp = "0.12.0"  # For low-level network stack (optional DPI bypass)
 chacha20poly1305 = "0.10.1"  # Additional encryption algorithm
 ipnetwork = "0.21.1"  # For IP address parsing and validation
 futures = "0.3.31"  # For async utilities
+quinn = "0.11.8"
+rustls = "0.23.31"
+rcgen = "0.14.3"
+webpki-roots = "1.0.2"
 
 [dev-dependencies]
 tempfile = "3.13.0"  # For testing file-based configs
