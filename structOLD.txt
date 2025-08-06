@@ -1,0 +1,93 @@
+rustVPN-core/
+├── src
+│   ├── cli
+│   │   └── interface.rs
+│   ├── config
+│   │   ├── mod.rs
+│   │   ├── model.rs
+│   │   └── parser.rs
+│   ├── connection
+│   │   ├── protocols
+│   │   │   ├── proxy
+│   │   │   │   ├── http.rs
+│   │   │   │   ├── https.rs
+│   │   │   │   ├── mod.rs
+│   │   │   │   ├── socks4.rs
+│   │   │   │   └── socks5.rs
+│   │   │   ├── basic_TCP.rs
+│   │   │   ├── basic_UDP.rs
+│   │   │   ├── mod.rs
+│   │   │   ├── openvpn.rs
+│   │   │   ├── plugin.rs
+│   │   │   ├── shadowsocks.rs
+│   │   │   └── wireguard.rs
+│   │   ├── manager.rs
+│   │   └── mod.rs
+│   ├── encryption
+│   │   ├── cipher
+│   │   │   ├── aead.rs
+│   │   │   ├── aes.rs
+│   │   │   ├── chacha20.rs
+│   │   │   └── mod.rs
+│   │   ├── key
+│   │   │   ├── kdf.rs
+│   │   │   ├── manager.rs
+│   │   │   ├── mod.rs
+│   │   │   └── store.rs
+│   │   ├── cipher.rs
+│   │   ├── error.rs
+│   │   ├── key_manager.rs
+│   │   ├── mod.rs
+│   │   └── traits.rs
+│   ├── obfuscation
+│   │   ├── dpi
+│   │   │   ├── fragment.rs
+│   │   │   ├── masquerade.rs
+│   │   │   ├── mod.rs
+│   │   │   ├── protocol_shift.rs
+│   │   │   └── timing.rs
+│   │   ├── plugin
+│   │   │   ├── interface.rs
+│   │   │   ├── loader.rs
+│   │   │   └── mod.rs
+│   │   ├── preset
+│   │   │   ├── advanced.rs
+│   │   │   ├── basic.rs
+│   │   │   ├── custom.rs
+│   │   │   └── mod.rs
+│   │   ├── protocol
+│   │   │   ├── encryption.rs
+│   │   │   ├── header.rs
+│   │   │   ├── mod.rs
+│   │   │   └── tunnel.rs
+│   │   ├── timing
+│   │   │   ├── delay.rs
+│   │   │   ├── jitter.rs
+│   │   │   └── mod.rs
+│   │   ├── utils
+│   │   │   ├── crypto.rs
+│   │   │   ├── mod.rs
+│   │   │   └── packet.rs
+│   │   ├── common.rs
+│   │   └── mod.rs
+│   ├── plugin
+│   │   ├── loader.rs
+│   │   └── mod.rs
+│   ├── tunneling
+│   │   ├── device.rs
+│   │   ├── mod.rs
+│   │   └── routing.rs
+│   ├── utils
+│   │   ├── common.rs
+│   │   ├── error.rs
+│   │   ├── logging.rs
+│   │   ├── metrics.rs
+│   │   └── mod.rs
+│   └── main.rs
+├── Cargo.lock
+├── Cargo.toml
+├── LICENSE
+├── README.md
+├── structMaybe.txt
+├── structNew.txt
+└── structOLD.txt

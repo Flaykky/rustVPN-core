@@ -1,0 +1,103 @@
+// struct of project
+
+ustVPN-core/
+├── src/
+│   ├── cli/
+│   │   ├── interface.rs         # UI: аргументы, команды
+│   │   ├── handler.rs           # Обработка команд CLI
+│   │   ├── output.rs            # Форматирование вывода, spinners, colors
+│   │   └── mod.rs
+│
+│   ├── config/
+│   │   ├── loader.rs
+│   │   ├── model.rs
+│   │   ├── parser.rs
+│   │   └── mod.rs
+│
+│   ├── core/                    # Основной слой VPN-логики
+│   │   ├── controller.rs        # Запуск/остановка клиента
+│   │   ├── state.rs             # Runtime state
+│   │   └── mod.rs
+│
+│   ├── connection/
+│   │   ├── manager.rs
+│   │   ├── transport/           # Новый уровень абстракции
+│   │   │   ├── tcp.rs
+│   │   │   ├── udp.rs
+│   │   │   └── mod.rs
+│   │   ├── protocols/
+│   │   │   ├── proxy/
+│   │   │   │   ├── http.rs
+│   │   │   │   ├── https.rs
+│   │   │   │   ├── socks4.rs
+│   │   │   │   ├── socks5.rs
+│   │   │   │   └── mod.rs
+│   │   │   ├── openvpn.rs
+│   │   │   ├── wireguard.rs
+│   │   │   ├── shadowsocks.rs
+│   │   │   ├── plugin.rs
+│   │   │   └── mod.rs
+│   │   └── mod.rs
+│
+│   ├── encryption/
+│   │   ├── cipher/
+│   │   ├── key/
+│   │   ├── traits.rs
+│   │   ├── error.rs
+│   │   └── mod.rs
+│
+│   ├── obfuscation/
+│   │   ├── dpi/
+│   │   │   ├── fragment.rs 
+│   │   │   ├── masquerade.rs
+│   │   │   ├── mod.rs 
+│   │   │   ├── protocol_shift.rs
+│   │   │   └── timing.rs  
+│   │   ├── plugin/
+│   │   │   ├── interface.rs 
+│   │   │   ├── loader.rs
+│   │   │   └── mod.rs
+│   │   ├── preset/
+│   │   │   ├── advanced.rs 
+│   │   │   ├── basic.rs
+│   │   │   ├── custom.rs
+│   │   │   └── mod.rs
+│   │   ├── protocol/
+│   │   │   ├── encryption.rs
+│   │   │   ├── header.rs
+│   │   │   ├── mod.rs 
+│   │   │   └──tunnel.rs 
+│   │   ├── timing/
+│   │   │   ├── delay.rs
+│   │   │   ├── jitter.rs 
+│   │   │   └── mod.rs 
+│   │   ├── utils/
+│   │   │   ├── crypto.rs 
+│   │   │   ├── mod.rs 
+│   │   │   └── packet.rs 
+│   │   ├── common.rs
+│   │   └── mod.rs
+│
+│   ├── plugin/
+│   │   ├── loader.rs
+│   │   └── mod.rs
+│
+│   ├── tunneling/
+│   │   ├── device.rs
+│   │   ├── routing.rs
+│   │   └── mod.rs
+│
+│   ├── utils/
+│   │   ├── common.rs
+│   │   ├── logging.rs
+│   │   ├── error.rs
+│   │   ├── metrics.rs
+│   │   └── mod.rs
+│
+│   ├── lib.rs                   # entry point for the library
+│   └── main.rs                  # CLI binary
+│
+├── Cargo.toml
+├── Cargo.lock
+├── README.md
+└── LICENSE
