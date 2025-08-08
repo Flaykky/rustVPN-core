@@ -142,7 +142,7 @@ rustVPN-core/                        # Root directory of the Rust-based VPN proj
 ├── README.md                    # Project overview and usage instructions
 ├── structMaybe.txt              # (Possibly) Proposed or alternative project structure
 ├── structNew.txt                # Newer version of the project structure
-├── structOLD.txt                # Original/older project structure
+└──  structOLD.txt                # Original/older project structure
 ```
 
 ## levels of cliInterface
