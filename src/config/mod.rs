@@ -1,5 +1,6 @@
 pub mod model;
 pub mod parser;
+pub mod loader;
 
 pub use model::{
     Config, ServerConfig, ProtocolConfig, ProtocolType,
