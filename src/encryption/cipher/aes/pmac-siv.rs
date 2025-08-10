@@ -181,4 +181,145 @@ impl AeadCipher for Aes256PmacSivCipher {
             return Err(CipherError::InvalidNonce(format!(
                 "AES-PMAC-SIV требует 16-байтный nonce, получено {} байт",
                 nonce.len()
-            )).
+            )).into());
+        }
+
+        log_debug!("Шифрование {} байт через AES-256-PMAC-SIV", data.len());
+        
+        let mut buffer = data.to_vec();
+        
+        let nonce_array: &GenericArray<u8, <Aes256PmacSiv as AeadInPlace>::NonceSize> = 
+            GenericArray::from_slice(nonce);
+        
+        self.cipher.encrypt_in_place(nonce_array, b"", &mut buffer)
+            .map_err(|e| {
+                log::error!("Ошибка шифрования AES-256-PMAC-SIV: {:?}", e);
+                CipherError::EncryptionFailed(format!("AES-SIV encryption error: {:?}", e))
+            })?;
+        
+        log_info!("AES-256-PMAC-SIV: зашифровано {} байт (итоговый размер: {} байт)", data.len(), buffer.len());
+        Ok(buffer)
+    }
+
+    fn decrypt_with_nonce(&self, data: &[u8], nonce: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+        if nonce.len() != 16 {
+            log_warn!("Неверная длина nonce для AES-256-PMAC-SIV: {} байт", nonce.len());
+            return Err(CipherError::InvalidNonce(format!(
+                "AES-PMAC-SIV требует 16-байтный nonce, получено {} байт",
+                nonce.len()
+            )).into());
+        }
+
+        if data.len() < 16 {
+            log_warn!("Слишком короткие данные для расшифровки AES-256-PMAC-SIV: {} байт", data.len());
+            return Err(CipherError::InvalidDataLength(
+                "Данные слишком короткие для AES-PMAC-SIV".to_string()
+            ).into());
+        }
+
+        log_debug!("Расшифровка {} байт через AES-256-PMAC-SIV", data.len());
+        
+        let mut buffer = data.to_vec();
+        
+        let nonce_array: &GenericArray<u8, <Aes256PmacSiv as AeadInPlace>::NonceSize> = 
+            GenericArray::from_slice(nonce);
+        
+        self.cipher.decrypt_in_place(nonce_array, b"", &mut buffer)
+            .map_err(|e| {
+                log::error!("Ошибка расшифровки AES-256-PMAC-SIV (возможно, ошибка аутентификации): {:?}", e);
+                CipherError::DecryptionFailed(format!("AES-SIV decryption/authentication error: {:?}", e))
+            })?;
+        
+        log_info!("AES-256-PMAC-SIV: расшифровано {} байт", buffer.len());
+        Ok(buffer)
+    }
+
+    fn cipher_name(&self) -> &'static str {
+        "aes-256-pmac-siv"
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::utils::common::generate_random_key;
+
+    #[test]
+    fn test_aes128_pmac_siv_encrypt_decrypt() {
+        let key = generate_random_key(32).expect("Не удалось сгенерировать 32-байтный ключ");
+        let cipher = Aes128PmacSivCipher::new(&key).expect("Не удалось создать AES-128-PMAC-SIV шифр");
+        let nonce = Aes128PmacSivCipher::generate_nonce();
+        let plaintext = b"Hello, AES-128-PMAC-SIV World!";
+
+        let encrypted = cipher.encrypt_with_nonce(plaintext, &nonce).expect("Шифрование не удалось");
+        let decrypted = cipher.decrypt_with_nonce(&encrypted, &nonce).expect("Расшифровка не удалась");
+
+        assert_eq!(decrypted, plaintext);
+    }
+
+    #[test]
+    fn test_aes256_pmac_siv_encrypt_decrypt() {
+        let key = generate_random_key(64).expect("Не удалось сгенерировать 64-байтный ключ");
+        let cipher = Aes256PmacSivCipher::new(&key).expect("Не удалось создать AES-256-PMAC-SIV шифр");
+        let nonce = Aes256PmacSivCipher::generate_nonce();
+        let plaintext = b"Hello, AES-256-PMAC-SIV World!";
+
+        let encrypted = cipher.encrypt_with_nonce(plaintext, &nonce).expect("Шифрование не удалось");
+        let decrypted = cipher.decrypt_with_nonce(&encrypted, &nonce).expect("Расшифровка не удалась");
+
+        assert_eq!(decrypted, plaintext);
+    }
+
+    #[test]
+    fn test_aes128_pmac_siv_invalid_key_length() {
+        let key = vec![0u8; 31]; // Неверная длина
+        let result = Aes128PmacSivCipher::new(&key);
+        assert!(result.is_err());
+        match result.unwrap_err() {
+            CipherError::InvalidKeyLength(_) => {}, // Ожидаем эту ошибку
+            _ => panic!("Ожидалась ошибка InvalidKeyLength"),
+        }
+    }
+
+    #[test]
+    fn test_aes256_pmac_siv_invalid_key_length() {
+        let key = vec![0u8; 63]; // Неверная длина
+        let result = Aes256PmacSivCipher::new(&key);
+        assert!(result.is_err());
+        match result.unwrap_err() {
+            CipherError::InvalidKeyLength(_) => {}, // Ожидаем эту ошибку
+            _ => panic!("Ожидалась ошибка InvalidKeyLength"),
+        }
+    }
+
+    #[test]
+    fn test_aes128_pmac_siv_invalid_nonce_length() {
+        let key = generate_random_key(32).expect("Не удалось сгенерировать ключ");
+        let cipher = Aes128PmacSivCipher::new(&key).expect("Не удалось создать шифр");
+        let nonce = vec![0u8; 15]; // Неверная длина nonce
+        let plaintext = b"test";
+        
+        let result = cipher.encrypt_with_nonce(plaintext, &nonce);
+        assert!(result.is_err());
+        // Ошибка будет преобразована в VpnError, но внутри должна быть CipherError::InvalidNonce
+    }
+
+    #[test]
+    fn test_aes128_pmac_siv_decryption_failure_on_tampered_data() {
+        let key = generate_random_key(32).expect("Не удалось сгенерировать ключ");
+        let cipher = Aes128PmacSivCipher::new(&key).expect("Не удалось создать шифр");
+        let nonce = Aes128PmacSivCipher::generate_nonce();
+        let plaintext = b"original data";
+        
+        let mut encrypted = cipher.encrypt_with_nonce(plaintext, &nonce).expect("Шифрование не удалось");
+        
+        // Портим данные
+        if !encrypted.is_empty() {
+            encrypted[0] ^= 0x01;
+        }
+        
+        let result = cipher.decrypt_with_nonce(&encrypted, &nonce);
+        assert!(result.is_err());
+        // Ожидаем ошибку расшифровки (аутентификации)
+    }
+}
