@@ -141,11 +141,11 @@ impl Aes128Cfb {
 }
 
 impl StreamCipher for Aes128Cfb {
-    fn encrypt(&self,  &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+    fn encrypt(&self, data: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
         self.inner.process(data).map_err(Into::into)
     }
 
-    fn decrypt(&self,  &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+    fn decrypt(&self, data: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
         // Для CFB режима шифрование и дешифрование идентичны
         self.inner.process(data).map_err(Into::into)
     }
@@ -166,11 +166,11 @@ impl Aes128Cfb1 {
 }
 
 impl StreamCipher for Aes128Cfb1 {
-    fn encrypt(&self,  &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+    fn encrypt(&self, data: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
         self.inner.process(data).map_err(Into::into)
     }
 
-    fn decrypt(&self,  &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+    fn decrypt(&self, data: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
         self.inner.process(data).map_err(Into::into)
     }
 }
