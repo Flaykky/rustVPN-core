@@ -103,6 +103,8 @@ impl CipherFactory {
                 log::warn!("Неподдерживаемый stream шифр: {}", method);
                 Err(CipherError::UnsupportedCipher(method.to_string()).into())
             }
+
+
         }
     }
 }
