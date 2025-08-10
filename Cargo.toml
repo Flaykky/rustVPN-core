@@ -32,6 +32,7 @@ quinn = "0.11.8"
 rustls = "0.23.31"
 rcgen = "0.14.3"
 webpki-roots = "1.0.2"
+aes-siv = "0.7.0"
 
 [dev-dependencies]
 tempfile = "3.13.0"  # For testing file-based configs
