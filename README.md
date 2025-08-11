@@ -209,7 +209,7 @@ for windows (64, x86):
 - wireguard through shadowsocks obfuscation ❌
 - http/https/socks4/socks5 proxy support ✔️
 - shadowsocks protocol support ✔️
-- install_linux , install_win64, install_mac shell scripts for installations ❌
+- install_linux , install_win64, install_mac shell scripts for installation ❌
 - encryption methods ✔️
 - openvpn protocol support ❌
 
