@@ -53,7 +53,7 @@ impl Salsa20Cipher {
 }
 
 impl StreamCipher for Salsa20Cipher {
-    fn encrypt(&self,  &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+    fn encrypt(&self, data: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
         log_debug!("Шифрование {} байт через Salsa20", data.len());
         
         // Для потокового шифра nonce должен быть предоставлен вызывающей стороной
@@ -70,7 +70,7 @@ impl StreamCipher for Salsa20Cipher {
         Ok(buffer)
     }
 
-    fn decrypt(&self,  &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
+    fn decrypt(&self, data: &[u8]) -> Result<Vec<u8>, crate::utils::error::VpnError> {
         log_debug!("Расшифровка {} байт через Salsa20", data.len());
         
         // Для Salsa20 шифрование и дешифрование идентичны
