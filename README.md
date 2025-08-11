@@ -8,6 +8,7 @@ A full VPN client in CLI mode for private use.
 - DPI bypassing by obfuscations (udp2raw)
 - Proxy support
 - Many cli-interface modes
+- avaible all most secure algorithms of encryption 
 
 
 ## Struct of project
