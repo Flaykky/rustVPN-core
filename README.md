@@ -136,7 +136,7 @@ rustVPN-core/
 
 ```
 
-## levels of cliInterface
+## modes of cliInterface
 
 - first: Minimum, only important info
 - second: minimum with details
