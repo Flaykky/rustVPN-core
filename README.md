@@ -31,7 +31,7 @@ rustVPN-core/
 │   │   │   ├── openvpn.rs               # OpenVPN protocol implementation
 │   │   │   ├── plugin.rs                # Protocol plugin interface
 │   │   │   ├── shadowsocks.rs           # Shadowsocks protocol implementation
-│   │   │   └── wireguard.rs              # WireGuard protocol implementation
+│   │   │   └── wireguard.rs             # WireGuard protocol implementation
 │   │   ├── proxy                        # Proxy protocol support
 │   │   │   ├── http.rs                  # HTTP proxy support
 │   │   │   ├── https.rs                 # HTTPS proxy support
@@ -78,7 +78,7 @@ rustVPN-core/
 │   │   │   ├── masquerade.rs            # Protocol masquerading
 │   │   │   ├── mod.rs                   # DPI module entry point
 │   │   │   ├── protocol_shift.rs        # Protocol shifting to avoid detection
-│   │   │   └── timing.rs                 # Timing obfuscation techniques
+│   │   │   └── timing.rs                # Timing obfuscation techniques
 │   │   ├── plugin                       # Obfuscation plugin support
 │   │   │   ├── interface.rs             # Plugin interface definition
 │   │   │   ├── loader.rs                # Loads obfuscation plugins
@@ -92,10 +92,10 @@ rustVPN-core/
 │   │   │   ├── encryption.rs            # Encrypted obfuscation protocol
 │   │   │   ├── header.rs                # Protocol header modifications
 │   │   │   ├── mod.rs                   # Protocol module entry point
-│   │   │   └── tunnel.rs                 # Tunneling obfuscation protocol
+│   │   │   └── tunnel.rs                # Tunneling obfuscation protocol
 │   │   ├── timing                       # Timing control for obfuscation
-│   │   │   ├── delay.rs                  # Adds packet delays
-│   │   │   ├── jitter.rs                 # Adds jitter to packet timing
+│   │   │   ├── delay.rs                 # Adds packet delays
+│   │   │   ├── jitter.rs                # Adds jitter to packet timing
 │   │   │   └── mod.rs                   # Timing module entry point
 │   │   ├── utils                        # Obfuscation utilities
 │   │   │   ├── crypto.rs                # Helper cryptographic functions
