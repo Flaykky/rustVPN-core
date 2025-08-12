@@ -130,7 +130,6 @@ rustVPN-core/
 ├── Cargo.toml                           # Project manifest
 ├── LICENSE                              # License information
 ├── README.md                            # Project documentation
-├── structMaybe.txt                      # Possible project structure draft
 ├── structNew.txt                        # New structure proposal
 └── structOLD.txt                        # Old structure reference
 
