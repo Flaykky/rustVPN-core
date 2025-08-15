@@ -156,7 +156,7 @@ cd rustVPN-core
 
 ### requirments
 - rustc 
-- libaries in cargo.toml
+- libaries that pointed in cargo.toml
 
 ### building
 
