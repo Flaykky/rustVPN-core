@@ -169,7 +169,7 @@ for linux:
 for windows (64, x86): 
 
 ```powershell
-./install_win64.sh
+./install_win64.bat
 ```
 
 
