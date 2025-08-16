@@ -211,6 +211,7 @@ for windows (64, x86):
 - install_linux , install_win64, install_mac shell scripts for installation ❌
 - encryption methods ✔️
 - openvpn protocol support ❌
+- killswitch for unix/windows ❌
 
 ## license 
 
