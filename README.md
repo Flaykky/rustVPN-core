@@ -203,13 +203,13 @@ for windows (64, x86):
 
 ## TODO
 
-- CLI interfaces ❌
+- CLI interfaces ❌ (1 done) 
 - DPI obfuscations ❌
 - wireguard through shadowsocks obfuscation ❌
 - http/https/socks4/socks5 proxy support ✔️
 - shadowsocks protocol support ✔️
 - install_linux , install_win64, install_mac shell scripts for installation ❌
-- encryption methods ✔️
+- most popular encryption methods ✔️
 - openvpn protocol support ❌
 - killswitch for unix/windows ❌
 
