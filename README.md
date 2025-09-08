@@ -205,6 +205,7 @@ for windows (64, x86):
 
 - CLI interfaces ❌ (1 done) 
 - DPI obfuscations ❌
+- vless+reality protocol support ❌
 - wireguard through shadowsocks obfuscation ❌
 - http/https/socks4/socks5 proxy support ✔️
 - shadowsocks protocol support ✔️
