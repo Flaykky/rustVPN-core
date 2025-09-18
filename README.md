@@ -5,7 +5,7 @@ A full VPN client in CLI mode for private use written in rust.
 ## Features
 - Works in CLI
 - Popular protocols support (wireguard, openVPN, shadowsocks)
-- DPI bypassing by obfuscations (udp2raw)
+- basic DPI bypassing by jitter, fake sni, encrypted DOH and other
 - all proxys support
 - Many cli-interface modes
 - avaible all most secure algorithms of encryption 
@@ -213,6 +213,7 @@ for windows (64, x86):
 - most popular encryption methods ✔️
 - openvpn protocol support ❌
 - killswitch for unix/windows ❌
+- custom dns resolver ❌
 
 ## license 
 
