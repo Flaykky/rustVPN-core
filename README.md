@@ -199,6 +199,7 @@ Help information
 - openvpn protocol support ❌
 - killswitch for unix/windows ❌
 - custom dns resolver ❌
+- android support (via termux) ❌
 
 ## license 
 
