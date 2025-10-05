@@ -200,6 +200,7 @@ Help information
 - killswitch for unix/windows ❌
 - custom dns resolver ❌
 - android support (via termux) ❌
+- server side software ❌
 
 ## license 
 
