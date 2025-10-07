@@ -6,13 +6,13 @@ edition = "2024"
 [dependencies]
 boringtun = { git = "https://github.com/cloudflare/boringtun", branch = "master" }
 shadowsocks-rust = { git = "https://github.com/shadowsocks/shadowsocks-rust", tag = "v1.21.0" }
-openssl = "0.10.66"
-tokio = { version = "1.40.0", features = ["full"] }
-serde = { version = "1.0.210", features = ["derive"] }
-serde_json = "1.0.128"
-clap = { version = "4.5.20", features = ["derive"] }
-log = "0.4.22"
-env_logger = "0.11.5"
+openssl = "0.10.73"
+tokio = { version = "1.47.1", features = ["full"] }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.145"
+clap = { version = "4.5.48", features = ["derive"] }
+log = "0.4.28"
+env_logger = "0.11.8"
 thiserror = "2.0.12"
 bytes = "1.7.2"
 async-trait = "0.1.83"
@@ -28,12 +28,12 @@ smoltcp = "0.12.0"
 chacha20poly1305 = "0.10.1"
 ipnetwork = "0.21.1"  
 futures = "0.3.31"  
-quinn = "0.11.8"
-rustls = "0.23.31"
+quinn = "0.11.9"
+rustls = "0.23.32"
 rcgen = "0.14.3"
 webpki-roots = "1.0.2"
 aes-siv = "0.7.0"
-generic-array = "0.14"
+generic-array = "1.2.0"
 
 [dev-dependencies]
 tempfile = "3.13.0"  
