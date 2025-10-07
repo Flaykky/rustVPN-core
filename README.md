@@ -188,19 +188,72 @@ Help information
 
 ## TODO
 
-- CLI interfaces ❌ (1 done) 
-- DPI obfuscations ❌
-- vless+reality protocol support ❌
-- wireguard through shadowsocks obfuscation ❌
-- http/https/socks4/socks5 proxy support ✔️
-- shadowsocks protocol support ✔️
-- install_linux , install_win64, install_mac shell scripts for installation ❌
-- most popular encryption methods ✔️
-- openvpn protocol support ❌
-- killswitch for unix/windows ❌
-- custom dns resolver ❌
-- android support (via termux) ❌
-- server side software ❌
+## 🟢 Priority 1: Core & Foundation
+- [ ] **CLI interfaces**
+  - [ ] 1. Minimal mode
+  - [ ] 2. Detailed mode (maybe remove)
+  - [ ] 3. Clean mode (maybe remove)
+  - [ ] 4. GUI-like mode (TUI with ratatui)
+- [ ] **Configuration system**
+  - [ ] Config loading (TOML/YAML/JSON)
+  - [ ] Profile management
+  - [ ] Remote config fetching
+- [ ] **Core VPN lifecycle**
+  - [ ] Connection manager
+  - [ ] State tracking
+  - [ ] Graceful startup/shutdown
+- [ ] **Logging & metrics**
+  - [ ] Structured logging (tracing)
+  - [ ] Performance metrics (bandwidth, latency)
+  - [ ] Error reporting
+
+## 🟡 Priority 2: Protocols & Obfuscation
+- [ ] **WireGuard protocol support** (MVP)
+- [ ] **Shadowsocks protocol support** (MVP)
+- [ ] **OpenVPN protocol support**
+- [ ] **VLESS + Reality protocol support** (with xray-core integration)
+- [ ] **DPI evasion & obfuscation**
+  - [ ] Packet fragmentation
+  - [ ] Header masquerading
+  - [ ] Timing delays/jitter
+  - [ ] Protocol shifting
+- [ ] **WireGuard through Shadowsocks** (obfuscation wrapper)
+- [ ] **Proxy support**
+  - [ ] HTTP/HTTPS proxy
+  - [ ] SOCKS4/5 proxy
+- [ ] **Custom DNS resolver**
+
+## 🔵 Priority 3: Security & Privacy
+- [ ] **Kill-switch for Unix/Windows**
+- [ ] **Quantum-resistant encryption** (future-ready)
+- [ ] **Secure key storage**
+- [ ] **Certificate pinning**
+- [ ] **IP leak protection**
+
+## 🟠 Priority 4: Deployment & Platforms
+- [ ] **Installation scripts**
+  - [ ] `install_linux.sh`
+  - [ ] `install_win64.ps1`
+  - [ ] `install_mac.sh`
+- [ ] **Cross-platform TUN/TAP** (Linux, macOS, Windows)
+- [ ] **Android support** (via Termux)
+- [ ] **Docker image**
+- [ ] **CI/CD pipeline**
+
+## 🟣 Priority 5: Advanced Features
+- [ ] **Plugin system** (for custom protocols/obfuscations)
+- [ ] **Server-side software** (rustVPN-server)
+- [ ] **Auto-update mechanism**
+- [ ] **QR code generator** for config sharing
+- [ ] **Performance benchmarks**
+
+## 🟤 Priority 6: Documentation & Testing
+- [ ] **README.md**
+- [ ] **CONTRIBUTING.md**
+- [ ] **docs/** folder with guides
+- [ ] **Unit & integration tests**
+- [ ] **Examples/** folder
+
 
 ## license 
 
