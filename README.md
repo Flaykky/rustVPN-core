@@ -188,7 +188,7 @@ Help information
 
 ## TODO
 
-## 🟢 Priority 1: Core & Foundation
+### 🟢 Priority 1: Core & Foundation
 - [ ] **CLI interfaces**
   - [ ] 1. Minimal mode
   - [ ] 2. Detailed mode (maybe remove)
