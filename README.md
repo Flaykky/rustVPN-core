@@ -190,12 +190,12 @@ Help information
 
 ### 🟢 Priority 1: Core & Foundation
 - [ ] **CLI interfaces**
-  - [ ] 1. Minimal mode
+  - [✔️] 1. Minimal mode
   - [ ] 2. Detailed mode (maybe remove)
   - [ ] 3. Clean mode (maybe remove)
   - [ ] 4. GUI-like mode (TUI with ratatui)
 - [ ] **Configuration system**
-  - [ ] Config loading (TOML/YAML/JSON)
+  - [✔️] Config loading (TOML/YAML/JSON)
   - [ ] Profile management
   - [ ] Remote config fetching
 - [ ] **Core VPN lifecycle**
@@ -203,13 +203,13 @@ Help information
   - [ ] State tracking
   - [ ] Graceful startup/shutdown
 - [ ] **Logging & metrics**
-  - [ ] Structured logging (tracing)
+  - [✔️] Structured logging (tracing)
   - [ ] Performance metrics (bandwidth, latency)
   - [ ] Error reporting
 
 ## 🟡 Priority 2: Protocols & Obfuscation
-- [ ] **WireGuard protocol support** (MVP)
-- [ ] **Shadowsocks protocol support** (MVP)
+- [✔️] **WireGuard protocol support** (MVP)
+- [✔️] **Shadowsocks protocol support** (MVP)
 - [ ] **OpenVPN protocol support**
 - [ ] **VLESS + Reality protocol support** (with xray-core integration)
 - [ ] **DPI evasion & obfuscation**
@@ -218,9 +218,9 @@ Help information
   - [ ] Timing delays/jitter
   - [ ] Protocol shifting
 - [ ] **WireGuard through Shadowsocks** (obfuscation wrapper)
-- [ ] **Proxy support**
-  - [ ] HTTP/HTTPS proxy
-  - [ ] SOCKS4/5 proxy
+- [✔️] **Proxy support**
+  - [✔️] HTTP/HTTPS proxy
+  - [✔️] SOCKS4/5 proxy
 - [ ] **Custom DNS resolver**
 
 ## 🔵 Priority 3: Security & Privacy
@@ -229,6 +229,7 @@ Help information
 - [ ] **Secure key storage**
 - [ ] **Certificate pinning**
 - [ ] **IP leak protection**
+- [ ] **split tunneling**
 
 ## 🟠 Priority 4: Deployment & Platforms
 - [ ] **Installation scripts**
