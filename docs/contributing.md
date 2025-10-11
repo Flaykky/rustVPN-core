@@ -253,3 +253,8 @@ rustVPN-core/
 
 src/obfuscation isn't completed yet
 
+
+## dependencies
+
+info about all dependencies that used in this project
+
