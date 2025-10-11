@@ -5,6 +5,7 @@
 
 ## struct of project:
 
+```text
 rustVPN-core/
 ├── docs
 │   └── contributing.md
@@ -251,6 +252,7 @@ rustVPN-core/
 ├── Cargo.lock
 ├── Cargo.toml
 └── readme.md
+```
 
 src/obfuscation isn't completed yet
 
