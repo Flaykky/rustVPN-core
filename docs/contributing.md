@@ -1,8 +1,5 @@
 # contributing 
 
-# contributing 
-
-
 ## struct of project:
 
 ```text
