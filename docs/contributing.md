@@ -98,10 +98,10 @@ rustVPN-core/
 │   │   │       │       ├── mod.rs
 │   │   │       │       └── pmac_siv.rs
 │   │   │       ├── chacha
-│   │   │       │   ├── cacha20-ietf-poly1305.rs
-│   │   │       │   ├── cacha20-ietf.rs
+│   │   │       │   ├── chaсha20-ietf-poly1305.rs
+│   │   │       │   ├── chacha20-ietf.rs
 │   │   │       │   ├── mod.rs
-│   │   │       │   └── xcacha20-ietf-poly1305.rs
+│   │   │       │   └── xchacha20-ietf-poly1305.rs
 │   │   │       ├── salsa
 │   │   │       │   ├── mod.rs
 │   │   │       │   ├── salsa20.rs
