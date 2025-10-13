@@ -1,4 +1,4 @@
-# project information
+# rustVPN-core documentation: project information
 
 ## What is the goal of this project?
 
