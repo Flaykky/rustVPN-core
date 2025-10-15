@@ -13,7 +13,6 @@ A VPN client in CLI mode for private use, DPI bypassing written in rust.
 
 ## to contributers
 all info about project, struct, code base and etc will be in docs/
-```
 
 ## modes of cli interface
 
