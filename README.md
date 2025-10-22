@@ -130,7 +130,7 @@ Help information
 ## 🟤 Priority 6: Documentation & Testing
 - [ ] **README.md**
 - [ ] **CONTRIBUTING.md**
-- [ ] **docs/** folder with guides
+- [✔️] **docs/** folder with guides
 - [ ] **Unit & integration tests**
 - [ ] **Examples/** folder
 
