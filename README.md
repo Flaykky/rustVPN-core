@@ -35,7 +35,7 @@ cd rustVPN-core
 
 ### requirments
 - rust compiler 
-- libaries that pointed in cargo.toml
+
 
 ### building
 
