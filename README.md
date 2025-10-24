@@ -1,6 +1,6 @@
 # rustVPN-core
 
-A VPN client in CLI mode for private use, DPI bypassing written in rust.
+A VPN client in CLI mode for private use, DPI bypassing written in Rust.
 
 ## Features
 - Works in CLI
@@ -34,7 +34,8 @@ cd rustVPN-core
 
 
 ### requirments
-- rust compiler 
+- rust compiler (last version)
+- cargo (last version)
 
 
 ### building
