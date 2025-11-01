@@ -5,7 +5,9 @@
 ```text
 rustVPN-core/
 ├── docs
-│   └── contributing.md
+│   ├── contributing.md
+|   ├── obfuscations.md
+|   └── project_information.md
 ├── src
 │   ├── bin
 │   │   ├── rustVPN-core-server.rs
