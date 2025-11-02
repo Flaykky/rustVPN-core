@@ -22,8 +22,6 @@ all info about project, struct, code base and etc will be in docs/
 - fourth: most similar to GUI
 
 ---
-
----
 ## installation && building [COMMING SOON]
 
 ### cloning repository 
