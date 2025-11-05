@@ -34,14 +34,19 @@ It aims to serve as reference material for developers of VPN clients and network
 - **Summer 2022:** Start of **WireGuard** and **Shadowsocks** detection campaigns; UDP-based protocols became primary targets.
 
 ### 2023–2025 — Advanced protocol detection and regional shutdowns
-- **2023:** RKN began coordinated blocking of **QUIC**, **DoH/DoT resolvers**, and **Google/Youtube CDN ranges**.  
-  Telegram and WhatsApp **voice/video calls** were intermittently blocked using DPI pattern detection.  
+- **2023:** RKN began coordinated blocking of **QUIC**, **DoH/DoT resolvers**, and **Google/Youtube CDN ranges**.
+            mass detect of openvpn and wireguard protocols 
+  
 - **2024:**  
   Some ISPs started injecting **RST packets** or bandwidth throttling for encrypted traffic.  
+  Youtube,Discord,Viber blocked
+  
 - **2025:** DPI upgraded with **active traffic shaping and AI-assisted classification**.  
   IP blocking extended to major hosting providers (Hetzner, OVH, DigitalOcean, AEZA, etc.).  
   Laws introduced fines for searching “extremist” content, with additional penalties if VPN use is detected.
   Reports of **mobile internet shutdowns** outside Moscow and selective **whitelisting** (only VK, Yandex, Gosuslugi and other pro-government/government's services).
+  Telegram and WhatsApp **voice/video calls** were intermittently blocked using DPI pattern detection.
+
 ---
 
 ## 2. Current DPI Mechanisms in Russia (as of 2025)
@@ -103,3 +108,4 @@ When deploying VPN or proxy infrastructure in Russia-targeted environments:
 ---
 
 _Last updated: November 2025_
+
