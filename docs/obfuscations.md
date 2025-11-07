@@ -70,7 +70,7 @@ It aims to serve as reference material for developers of VPN clients and network
 | **VLESS + Reality (Xray-core)** | Uses TLS mimicry with browser-like fingerprints (uTLS) and “reality” handshake | Currently one of the most effective methods. |
 | **GoodbyeDPI / zapret** | Local packet filtering tool that modifies TCP streams to bypass censorship at the client side | Works partially, mostly against SNI/DNS blocking. |
 | **UDP-over-TCP tunnel** | Wraps UDP traffic (WireGuard) inside TCP stream | Deprecated — easy to detect and throttle. |
-| **Shadowsocks (simple-obfs, v2ray-plugin)** | Encrypted proxy protocol; simple obfuscation no longer effective | Detected by active probing since ~2023. |
+| **Shadowsocks (simple-obfs, v2ray-plugin)** | Encrypted proxy protocol; simple obfuscation no longer effective | Detected by active probing since ~semptember of 2025. |
 | **Tor with obfs4 / meek bridges** | Bridges use domain fronting or TLS mimicry | Still works intermittently; bridge IPs often blacklisted. |
 
 ---
@@ -108,4 +108,5 @@ When deploying VPN or proxy infrastructure in Russia-targeted environments:
 ---
 
 _Last updated: November 2025_
+
 
