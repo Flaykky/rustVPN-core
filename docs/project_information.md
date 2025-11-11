@@ -5,7 +5,11 @@
 make a secure self-hosted private VPN-client
 
 ## What are its unique features?
+- CLI (TUI) interface
+- fully opensource
+- 'reversing' of DPI mechanisms
 
+  
 ## What is the story behind this project?
 
 ## Will it be in demand?
