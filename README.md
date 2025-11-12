@@ -21,7 +21,10 @@ all info about project, struct, code base and etc will be in docs/
 - third: just comfort interface  
 - fourth: most similar to GUI
 
----
+## DPI evasion
+all info about DPI evasions mechanism will be provided at docs/obfuscations.md 
+
+
 ## installation && building [COMMING SOON]
 
 ### cloning repository 
