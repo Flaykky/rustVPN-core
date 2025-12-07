@@ -47,6 +47,10 @@ It aims to serve as reference material for developers of VPN clients and network
   Reports of **mobile internet shutdowns** outside Moscow and selective **whitelisting** (only VK, Yandex, Gosuslugi and other pro-government/government's services).
   Telegram and WhatsApp **voice/video calls** were intermittently blocked using DPI pattern detection.
 
+late 2025:
+
+myth about RKN successfully detected VLESS protocol
+
 ---
 
 ## 2. Current DPI Mechanisms in Russia (as of 2025)
