@@ -49,6 +49,8 @@ It aims to serve as reference material for developers of VPN clients and network
 
 late 2025:
 
+whatsapp block (slowing down)
+roblox, facetime, snapchat block
 myth about RKN successfully detected VLESS protocol
 
 ---
