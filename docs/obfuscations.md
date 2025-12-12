@@ -113,6 +113,6 @@ When deploying VPN or proxy infrastructure in Russia-targeted environments:
 
 ---
 
-_Last updated: November 2025_
+_Last updated: December 2025_
 
 
