@@ -7,7 +7,7 @@ make a secure self-hosted private VPN-client
 ## What are its unique features?
 - CLI (TUI) interface
 - fully opensource
-- 'reversing' of DPI mechanisms(mainly Russian, learn more at obfuscations.md)
+- 'reversing' of DPI mechanisms(mainly Russian, learn more at (obfuscations.md[obfuscations.md])
 - self hosted vpn
 
   
