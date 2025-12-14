@@ -4,7 +4,7 @@ A VPN client in CLI mode for private use, DPI bypassing written in Rust.
 
 ## Features
 - Works in CLI
-- Popular protocols support (wireguard, openVPN, shadowsocks)
+- Popular protocols support (wireguard, openVPN, shadowsocks, vless)
 - basic DPI bypassing by jitter, fake sni, encrypted DOH and other
 - All proxies protocols support
 - Many cli-interface modes
